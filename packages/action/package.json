@@ -1,0 +1,22 @@
+{
+  "name": "@claims-ledger/action",
+  "version": "0.1.0",
+  "private": true,
+  "description": "auto-ledger-verify — GitHub Action that diffs the Claims Ledger and fails CI on stale anchors.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --platform=node --target=node20 --format=cjs --outfile=dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@claims-ledger/ledger-core": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

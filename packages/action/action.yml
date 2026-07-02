@@ -1,0 +1,46 @@
+name: 'Auto-Ledger & Verify'
+description: >-
+  Extract source-anchored claims from code, docs, and meeting transcripts;
+  diff the Claims Ledger; verify anchor freshness; annotate the PR.
+author: 'isatimur'
+branding:
+  icon: 'anchor'
+  color: 'orange'
+
+inputs:
+  ledger-path:
+    description: 'Path to the markdown ledger (source of truth)'
+    default: '.ledger/claims.md'
+  mode:
+    description: 'extract | verify | both'
+    default: 'both'
+  docs-globs:
+    description: 'Newline-separated globs for doc ingestion'
+    default: |
+      docs/**/*.md
+      README.md
+  transcripts-dir:
+    description: 'Directory of .vtt/.srt/whisper.json meeting transcripts'
+    default: '.ledger/transcripts'
+  fail-on:
+    description: 'Comma list: stale-anchor,unanchored-strong,support-downgrade'
+    default: 'stale-anchor,unanchored-strong'
+  judge-models:
+    description: 'Cross-family panel, comma-separated (median wins)'
+    default: 'meta-llama/llama-3.3-70b,qwen/qwen-2.5-72b,deepseek/deepseek-chat'
+  openrouter-api-key:
+    description: 'API key for the judge panel (skip scoring if empty)'
+    required: false
+  github-token:
+    description: 'Token for Checks API + PR comments'
+    default: ${{ github.token }}
+
+outputs:
+  ledger-diff:
+    description: 'JSON summary: {added, modified, removed, downgraded, stale}'
+  report-path:
+    description: 'Path to the generated ledger-report.md artifact'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

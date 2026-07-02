@@ -1,0 +1,24 @@
+# Example consumer workflow — copy to .github/workflows/ledger.yml in your repo.
+name: claims-ledger
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }        # differ needs the base ledger
+      - uses: isatimur/auto-ledger-verify@v1
+        with:
+          openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ledger-report
+          path: .ledger/ledger-report.md

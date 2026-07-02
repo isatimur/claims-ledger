@@ -1,0 +1,20 @@
+{
+  "name": "claims-ledger",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Claims-Ledger-as-a-Service — source-anchored claims for docs, PRs, and agent decisions. CI fails when the pointer goes stale.",
+  "license": "MIT",
+  "workspaces": [
+    "packages/ledger-core",
+    "packages/edt",
+    "packages/action"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

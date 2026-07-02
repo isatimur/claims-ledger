@@ -1,0 +1,35 @@
+# Self-hosting: this repo gates its own README/docs claims with its own Action.
+name: claims-ledger
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: ./packages/action
+        with:
+          mode: verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ledger-report
+          path: .ledger/ledger-report.md
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm test
+      - run: npm run build

@@ -1,0 +1,94 @@
+[
+  {
+    "claim_id": "claims#1",
+    "text": "The ledger parser is a byte-compatible port of the book's build_evidence.py grammar",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "ledger-core",
+      "parser"
+    ],
+    "anchors": [
+      {
+        "scheme": "git",
+        "ref": "git://58343a1/packages/ledger-core/src/parser.ts#L7-L7",
+        "confidence": "high",
+        "label": "parser.ts module doc",
+        "quote": "a mechanical, byte-compatible port of"
+      }
+    ],
+    "caveats": "Conformance is enforced against fixtures generated from the real 54-claim book ledger, not against live Python at test time."
+  },
+  {
+    "claim_id": "claims#2",
+    "text": "A stale anchor gates CI with exit code 11",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "edt",
+      "verify"
+    ],
+    "anchors": [
+      {
+        "scheme": "git",
+        "ref": "git://58343a1/packages/ledger-core/src/types.ts#L111-L111",
+        "confidence": "high",
+        "label": "gate exit code table",
+        "quote": "STALE_ANCHOR: 11,"
+      }
+    ],
+    "caveats": "Exit codes are API — see CONTRIBUTING.md rule 3."
+  },
+  {
+    "claim_id": "claims#3",
+    "text": "Anchors cannot be fabricated: the verbatim quote must resolve at the ref",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "ledger-core",
+      "resolver"
+    ],
+    "anchors": [
+      {
+        "scheme": "git",
+        "ref": "git://58343a1/packages/ledger-core/src/resolver.ts#L22-L22",
+        "confidence": "high",
+        "label": "resolver anti-fabrication note",
+        "quote": "An LLM can hallucinate a justification; it cannot hallucinate a string into"
+      }
+    ]
+  },
+  {
+    "claim_id": "claims#4",
+    "text": "Judge-panel disagreement above 20 points flags the decision instead of averaging it away",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "ledger-core",
+      "panel"
+    ],
+    "anchors": [
+      {
+        "scheme": "git",
+        "ref": "git://58343a1/packages/ledger-core/src/panel.ts#L13-L13",
+        "confidence": "high",
+        "label": "panel merge constants",
+        "quote": "export const DISAGREEMENT_THRESHOLD = 20;"
+      }
+    ]
+  },
+  {
+    "claim_id": "claims#5",
+    "text": "First value is one command: edt init scaffolds the ledger workspace",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "edt",
+      "onboarding"
+    ],
+    "anchors": [
+      {
+        "scheme": "doc",
+        "ref": "doc://README.md#quickstart@58343a1",
+        "confidence": "high",
+        "label": "README quickstart",
+        "quote": "npx @claims-ledger/edt init"
+      }
+    ]
+  }
+]

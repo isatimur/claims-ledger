@@ -113,6 +113,7 @@ export const CLAIMS_TEMPLATE = `# Claims Ledger
 export const PRE_COMMIT_HOOK = `#!/usr/bin/env bash
 # .git/hooks/pre-commit — installed by \`edt init\`.
 # Fail fast on stale anchors touched by this commit.
+command -v edt >/dev/null 2>&1 || exit 0   # edt not installed here — don't block
 edt verify --only-touched --gate || {
   echo "✖ claims-ledger: your commit breaks one or more anchors."
   echo "  Run: edt reanchor <claim-id>  (or edt verify for details)"

@@ -1,0 +1,26 @@
+{
+  "name": "@claims-ledger/edt",
+  "version": "0.1.0",
+  "description": "edt — Evidence Decision Trace. A CLI that makes agents (and humans) anchor every claim and decision to a verifiable source, and fails CI when anchors go stale.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "edt": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"const fs=require('fs');const p='dist/cli.js';fs.writeFileSync(p,'#!/usr/bin/env node\\n'+fs.readFileSync(p,'utf8'));fs.chmodSync(p,0o755)\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@claims-ledger/ledger-core": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

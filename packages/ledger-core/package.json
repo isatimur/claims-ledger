@@ -1,7 +1,7 @@
 {
   "name": "@claims-ledger/ledger-core",
-  "version": "0.1.0",
-  "description": "Parser, anchor schemes, differ, resolver cascade, and verifier for .ledger/claims.md — the core of Claims-Ledger-as-a-Service.",
+  "version": "0.2.0",
+  "description": "Parser, anchor schemes, differ, resolver cascade, and verifier for .ledger/claims.md \u2014 the core of Claims-Ledger-as-a-Service.",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",

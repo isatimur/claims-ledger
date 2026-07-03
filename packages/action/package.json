@@ -1,8 +1,8 @@
 {
   "name": "@claims-ledger/action",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "auto-ledger-verify — GitHub Action that diffs the Claims Ledger and fails CI on stale anchors.",
+  "description": "auto-ledger-verify \u2014 GitHub Action that diffs the Claims Ledger and fails CI on stale anchors.",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -11,8 +11,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@claims-ledger/edt": "0.1.0",
-    "@claims-ledger/ledger-core": "0.1.0"
+    "@claims-ledger/edt": "0.2.0",
+    "@claims-ledger/ledger-core": "0.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

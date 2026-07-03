@@ -417,7 +417,7 @@ export function cmdExport(root: string, io: Io, opts: { format: string; trace?: 
         support_level: d.support_level,
         candidate_scopes: [d.kind],
         anchors: d.anchors,
-        provenance: { extracted_by: `edt/0.1.0`, ...(found.trace.pr != null ? { pr: found.trace.pr } : {}) },
+        provenance: { extracted_by: `edt/0.2.0`, ...(found.trace.pr != null ? { pr: found.trace.pr } : {}) },
       });
     }
   }

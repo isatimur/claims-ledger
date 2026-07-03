@@ -1,7 +1,7 @@
 # Action namespace — `isatimur/auto-ledger-verify` vs monorepo root
 
 README and examples reference `isatimur/auto-ledger-verify@v1` for a clean Marketplace
-slug. **Today the Action ships from this monorepo** with `action.yml` at the repository root.
+slug. **The mirror repo is live:** https://github.com/isatimur/auto-ledger-verify
 
 ## Use now (monorepo root Action)
 

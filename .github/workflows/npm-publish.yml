@@ -1,6 +1,7 @@
 # Manual npm publish — NPM_TOKEN must be a Granular Access Token with Read+Write on @claims-ledger
 # and "Bypass two-factor authentication for automation" enabled. See docs/NPM-PUBLISH.md.
-# Publishes @claims-ledger/ledger-core then @claims-ledger/edt@1.0.0.
+#
+# Idempotent: skips packages whose version is already on the registry (safe to re-run after local publish).
 name: npm-publish
 on:
   workflow_dispatch:
@@ -23,16 +24,14 @@ jobs:
         run: npm ci && npm run build && npm test
 
       - name: Publish @claims-ledger/ledger-core
-        working-directory: packages/ledger-core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: bash scripts/npm-publish-package.sh packages/ledger-core
 
       - name: Publish @claims-ledger/edt
-        working-directory: packages/edt
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: bash scripts/npm-publish-package.sh packages/edt
 
       - name: Verify registry
         run: |

@@ -136,6 +136,8 @@ Workflow: [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish
 
 Publishes `ledger-core` first, then `edt`. Verify with `npm view @claims-ledger/edt`.
 
+**Re-running is safe:** the workflow checks the registry before each publish. If a version is already live (e.g. you published locally first), that package is skipped and the job exits successfully.
+
 Local fallback after auth is configured:
 
 ```bash

@@ -85,7 +85,7 @@ publish_package() {
 
   echo ""
   echo "==> Publishing ${name} from ${dir}"
-  output="$(cd "${dir}" && npm publish --access public 2>&1)" || status=$?
+  output="$("${ROOT}/scripts/npm-publish-package.sh" "${dir}" 2>&1)" || status=$?
   echo "${output}"
 
   if [[ "${status}" -ne 0 ]]; then
@@ -95,7 +95,7 @@ publish_package() {
 }
 
 npm run build && npm test
-publish_package packages/ledger-core "@claims-ledger/ledger-core"
-publish_package packages/edt "@claims-ledger/edt"
+publish_package "${ROOT}/packages/ledger-core" "@claims-ledger/ledger-core"
+publish_package "${ROOT}/packages/edt" "@claims-ledger/edt"
 echo ""
 echo "Done. Verify: npx @claims-ledger/edt --help"

@@ -1,22 +1,44 @@
 # Optional: mirror Action artifacts to isatimur/auto-ledger-verify on each release.
-# Enable after creating the mirror repo — see docs/ACTION-MIRROR.md
+# Requires repo secret MIRROR_SYNC_TOKEN (PAT with repo scope on the mirror).
+# Manual sync: TAG=v1.0.0 ./scripts/sync-action-mirror.sh
 name: release-action-mirror
 on:
   push:
     tags: ['v*']
 jobs:
   mirror:
-    if: false  # flip to true when mirror repo exists
+    if: ${{ secrets.MIRROR_SYNC_TOKEN != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          mkdir -p /tmp/release/dist
-          sed 's|packages/action/dist/index.js|dist/index.js|' action.yml > /tmp/release/action.yml
-          cp -r packages/action/dist/* /tmp/release/dist/
-      - uses: softprops/action-gh-release@v2
-        with:
-          repository: isatimur/auto-ledger-verify
-          files: |
-            /tmp/release/action.yml
-            /tmp/release/dist/**
+      - run: npm ci && npm run build -w @claims-ledger/action
+      - name: Prepare mirror bundle
+        run: |
+          mkdir -p /tmp/mirror/dist /tmp/mirror/examples
+          sed 's|packages/action/dist/index.js|dist/index.js|' action.yml > /tmp/mirror/action.yml
+          cp -r packages/action/dist/* /tmp/mirror/dist/
+          cp examples/ledger.yml /tmp/mirror/examples/ledger.yml
+          cat > /tmp/mirror/README.md <<'EOF'
+          # auto-ledger-verify
+          > Fail CI when your docs' claims go stale.
+          ```yaml
+          - uses: isatimur/auto-ledger-verify@v1
+          ```
+          Mirror of [claims-ledger](https://github.com/isatimur/claims-ledger). Synced on tag.
+          EOF
+      - name: Push to mirror repo
+        env:
+          GH_TOKEN: ${{ secrets.MIRROR_SYNC_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/isatimur/auto-ledger-verify.git" /tmp/repo
+          cp -r /tmp/mirror/* /tmp/repo/
+          cd /tmp/repo
+          git add -A
+          git diff --staged --quiet || git commit -m "sync: mirror ${TAG} from claims-ledger"
+          git tag -f "$TAG"
+          MAJOR="${TAG%%.*}"
+          git tag -f "$MAJOR" "$TAG"
+          git push origin main
+          git push origin "$TAG" --force
+          git push origin "$MAJOR" --force

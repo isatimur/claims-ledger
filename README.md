@@ -102,7 +102,14 @@ node scripts/event-ledger.mjs am_oeAoUhew "Harness Engineering"
 # → examples/ledgers/openai-harness-engineering-2025/
 ```
 
-Sample ledger: [OpenAI Harness Engineering (Ryan Lopopolo)](examples/ledgers/openai-harness-engineering-2025/) — 5 claims anchored to the second, sourced from the book corpus (honestly labeled). **Live:** [fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025](https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025).
+Sample ledgers (Books of Truth — honestly labeled corpus samples):
+
+| Talk | Claims | Live |
+|------|--------|------|
+| [Harness Engineering — Ryan Lopopolo, OpenAI](examples/ledgers/openai-harness-engineering-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025) |
+| [The New Code — Sean Grove, OpenAI](examples/ledgers/sean-grove-new-code-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025) |
+
+**Try in 30 seconds:** fork [claims-ledger-sandbox](https://github.com/isatimur/claims-ledger-sandbox) · Action namespace: [`isatimur/auto-ledger-verify@v1`](https://github.com/isatimur/auto-ledger-verify)
 
 ## Architecture
 

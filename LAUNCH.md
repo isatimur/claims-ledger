@@ -15,13 +15,18 @@
 - [x] Sandbox template at `examples/sandbox/`
 - [x] Show HN draft at `docs/SHOW-HN.md`
 - [x] Marketplace guide at `docs/MARKETPLACE.md`
-- [ ] Marketplace listing live with `examples/ledger.yml` as copy-paste
+- [ ] Marketplace listing live with `examples/ledger.yml` as copy-paste (Submit button — manual)
 - [x] `CONTRIBUTING.md` + good-first-issues seeded (HN traffic converts to contributors in the first 48h or never)
+- [x] Action mirror repo `isatimur/auto-ledger-verify` (Marketplace slug)
+- [x] Public sandbox `isatimur/claims-ledger-sandbox` (fork-me demo)
+- [x] Event ledger #2 — Sean Grove "The New Code" ([live](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025))
+- [x] Launch amplification drafts — `docs/PRODUCT-HUNT.md`, `docs/X-THREAD.md`, `docs/REDDIT-r-programming.md`
+- [x] Badge on book lab README (shields endpoint from `edt verify`)
 - [ ] Badge on 3–5 friendly repos (`img.claims-ledger.dev` — Cloudflare Worker, Phase 2)
 
 **Timeline:**
 - **T−14** — badge + Action quietly live; friendly repos onboarded; event ledger #1 published, shared only on X; collect reaction quotes
-- **T−7** — event ledger #2 (timed to an actual event that week); blog post drafted: *"We anchored every claim in a 794-video corpus. Then we pointed the machine at our own codebase."*
+- **T−7** — event ledger #2 published ([Sean Grove — The New Code](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025)); blog post drafted: *"We anchored every claim in a 794-video corpus. Then we pointed the machine at our own codebase."*
 - **T, 07:30 PT** — Show HN (title #1); first comment is the maker's technical walkthrough: schema, the anti-fabrication quote-resolution trick, the exit codes. HN respects mechanism over vision.
 - **T+1** — Product Hunt (never same day as HN); assets: the GIF, the event ledger, the badge
 - **T+2..7** — X thread on the event ledger's spiciest finding ("3 keynote claims graded *tentative* — here's the exact second each was made"); dev.to/newsletter follow-ups; respond to every HN comment with code links

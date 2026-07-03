@@ -14,7 +14,7 @@ The agent cannot click "Submit" on your behalf. Follow this checklist to list
 | Branding (anchor / orange) | ✅ in `action.yml` |
 | README Marketplace section | ✅ copy-paste workflow |
 | Demo GIF + social preview | ✅ `demo/demo.gif`, `docs/social-preview.png` |
-| Mirror repo `auto-ledger-verify` | ⏳ optional — see [`ACTION-MIRROR.md`](ACTION-MIRROR.md) |
+| Mirror repo `auto-ledger-verify` | ✅ https://github.com/isatimur/auto-ledger-verify |
 | Marketplace Submit button | ❌ manual — https://github.com/marketplace/new |
 | GitHub App (Checks API) | ❌ manual — Step 1 below |
 

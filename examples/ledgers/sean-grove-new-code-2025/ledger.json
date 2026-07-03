@@ -1,0 +1,122 @@
+[
+  {
+    "claim_id": "claims#1",
+    "text": "The new scarce skill is writing specifications that fully capture intent",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "sean-grove-new-code-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://8rABwKRsec4 00:09:02.560 → 00:09:07.760",
+        "confidence": "high",
+        "label": "Sean Grove, OpenAI",
+        "quote": "the new scarce skill is writing specifications that fully capture the intent"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "8rABwKRsec4",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#2",
+    "text": "Structured communication is the bottleneck once execution is cheap",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "sean-grove-new-code-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://8rABwKRsec4 00:03:59.200 → 00:04:00.869",
+        "confidence": "high",
+        "label": "Sean Grove, OpenAI",
+        "quote": "structured communication is the bottleneck."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "8rABwKRsec4",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#3",
+    "text": "The most valuable programmer communicates most effectively",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "sean-grove-new-code-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://8rABwKRsec4 00:04:29.440 → 00:04:33.030",
+        "confidence": "high",
+        "label": "Sean Grove, OpenAI",
+        "quote": "the person who communicates most effectively is the most valuable programmer."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "8rABwKRsec4",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#4",
+    "text": "Code is a lossy projection from the specification",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "sean-grove-new-code-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://8rABwKRsec4 00:06:58.639 → 00:07:01.830",
+        "confidence": "high",
+        "label": "Sean Grove, OpenAI",
+        "quote": "code itself is actually a lossy projection from the specification."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "8rABwKRsec4",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#5",
+    "text": "Engineers bring most value through communication, not code alone",
+    "support_level": "moderate",
+    "candidate_scopes": [
+      "event-ledger",
+      "sean-grove-new-code-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://8rABwKRsec4 00:02:45.200 → 00:02:51.040",
+        "confidence": "high",
+        "label": "Sean Grove, OpenAI",
+        "quote": "Code is sort of 10 to 20% of the value that you bring. The other 80 to 90% is in structured communication."
+      }
+    ],
+    "caveats": "Book synthesis claim — anchored to this talk as primary evidence.",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "8rABwKRsec4",
+      "sample": true
+    }
+  }
+]

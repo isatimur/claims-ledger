@@ -109,16 +109,29 @@ npm publish --access public   # in each package directory
 
 ---
 
-## CI publish (optional Phase 2)
+## CI publish (manual dispatch)
 
-Add `.github/workflows/npm-publish.yml` triggered on `v*` tags with `NPM_TOKEN` secret. Not required for launch — manual publish is fine for v1.0.0.
+Workflow added: [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)
+
+1. Create npm org `@claims-ledger` at https://www.npmjs.com/org/create
+2. Generate an **Automation** token at https://www.npmjs.com/settings/~/tokens
+3. Add repo secret **`NPM_TOKEN`** (Settings → Secrets → Actions)
+4. Run **Actions → npm-publish → Run workflow** on `main`
+
+Publishes `ledger-core` first, then `edt`. Verify with `npm view @claims-ledger/edt`.
+
+Local fallback after `npm login`:
+
+```bash
+./scripts/npm-publish.sh
+```
 
 ---
 
 ## Blockers right now
 
 1. **npm org `@claims-ledger` does not exist** — create before publish
-2. **Not logged in** — `npm login` as org owner
+2. **Not logged in locally** — `npm whoami` returns 401; use CI workflow with `NPM_TOKEN` or `npm login`
 3. **`ledger-core` must publish first** — edt depends on it at registry version, not workspace link
 
 Do **not** publish until user confirms org ownership and HN timing (optional: publish same morning as HN so `npx @claims-ledger/edt init` works in Show HN comments).

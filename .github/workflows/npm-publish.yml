@@ -1,0 +1,39 @@
+# Manual npm publish — run after adding NPM_TOKEN secret (Automation → npm automation token).
+# Publishes @claims-ledger/ledger-core then @claims-ledger/edt@1.0.0.
+name: npm-publish
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install, build, test
+        run: npm ci && npm run build && npm test
+
+      - name: Publish @claims-ledger/ledger-core
+        working-directory: packages/ledger-core
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+      - name: Publish @claims-ledger/edt
+        working-directory: packages/edt
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+      - name: Verify registry
+        run: |
+          npm view @claims-ledger/ledger-core version
+          npm view @claims-ledger/edt version

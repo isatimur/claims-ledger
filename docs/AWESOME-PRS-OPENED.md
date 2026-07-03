@@ -1,6 +1,6 @@
 # Awesome-list PRs — opened and ready
 
-Wave 4 status (Jul 3, 2026). Full copy-paste pack: [`AWESOME-LIST-PR.md`](AWESOME-LIST-PR.md).
+Wave 5 status (Jul 3, 2026). Full copy-paste pack: [`AWESOME-LIST-PR.md`](AWESOME-LIST-PR.md).
 
 ---
 
@@ -9,6 +9,7 @@ Wave 4 status (Jul 3, 2026). Full copy-paste pack: [`AWESOME-LIST-PR.md`](AWESOM
 | List | PR | Status |
 |------|-----|--------|
 | [sdras/awesome-actions](https://github.com/sdras/awesome-actions) | https://github.com/sdras/awesome-actions/pull/833 | **Opened** Jul 3, 2026 |
+| [e2b-dev/awesome-ai-agents](https://github.com/e2b-dev/awesome-ai-agents) | https://github.com/e2b-dev/awesome-ai-agents/pull/1193 | **Opened** Jul 3, 2026 |
 
 > If the PR link is empty, use the fork + diff in the next section — two clicks on GitHub.
 

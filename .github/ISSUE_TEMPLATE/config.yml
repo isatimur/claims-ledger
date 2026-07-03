@@ -1,6 +1,12 @@
 ---
 name: Config
 contact_links:
+  - name: Community Q&A
+    url: https://github.com/isatimur/claims-ledger/discussions
+    about: Questions, show-and-tell, ideas — see docs/COMMUNITY.md
+  - name: Public roadmap (v1.1)
+    url: https://github.com/isatimur/claims-ledger/blob/main/docs/ROADMAP-PUBLIC.md
+    about: Embedding resolver, online yt verify, hosted badge
   - name: Contributing guide
     url: https://github.com/isatimur/claims-ledger/blob/main/CONTRIBUTING.md
     about: Setup, layout, rules of the road

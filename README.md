@@ -39,10 +39,12 @@ Copy from [`examples/ledger.yml`](examples/ledger.yml) · sandbox template in [`
 ## Quickstart
 
 ```bash
-npx @claims-ledger/edt init      # scaffold .ledger/ + pre-commit hook
+npx @claims-ledger/edt init      # coming soon on npm — until then: npm install && npm run build && ./packages/edt/dist/cli.js
 $EDITOR .ledger/claims.md        # write a claim, anchor it to a commit/doc/ADR
 edt verify --gate                # exit 0: all anchors fresh · exit 11: something went stale
 ```
+
+> **npm:** `@claims-ledger/edt` is not published yet. Run `./scripts/npm-publish.sh` after `npm login` — see [`docs/NPM-PUBLISH.md`](docs/NPM-PUBLISH.md).
 
 `edt verify` writes [`.ledger/badge.json`](.ledger/badge.json) (shields.io endpoint schema) — commit it for a live README badge with zero infrastructure.
 
@@ -109,6 +111,7 @@ Sample ledgers (Books of Truth — honestly labeled corpus samples):
 | [Harness Engineering — Ryan Lopopolo, OpenAI](examples/ledgers/openai-harness-engineering-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025) |
 | [The New Code — Sean Grove, OpenAI](examples/ledgers/sean-grove-new-code-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025) |
 | [Building Your Own Software Factory — Eric Zakariasson, Cursor](examples/ledgers/cursor-software-factory-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/cursor-software-factory-2025) |
+| [Trustworthy Agents for High-Stakes — Joel Hron, Thomson Reuters](examples/ledgers/joel-hron-trustworthy-agents-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/joel-hron-trustworthy-agents-2025) |
 
 **Try in 30 seconds:** fork [claims-ledger-sandbox](https://github.com/isatimur/claims-ledger-sandbox) · Action namespace: [`isatimur/auto-ledger-verify@v1`](https://github.com/isatimur/auto-ledger-verify)
 

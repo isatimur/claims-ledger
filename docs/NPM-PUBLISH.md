@@ -122,3 +122,22 @@ Add `.github/workflows/npm-publish.yml` triggered on `v*` tags with `NPM_TOKEN` 
 3. **`ledger-core` must publish first** — edt depends on it at registry version, not workspace link
 
 Do **not** publish until user confirms org ownership and HN timing (optional: publish same morning as HN so `npx @claims-ledger/edt init` works in Show HN comments).
+
+---
+
+## One-liner (after login)
+
+```bash
+chmod +x scripts/npm-publish.sh && ./scripts/npm-publish.sh
+```
+
+Or step-by-step:
+
+```bash
+npm login
+npm whoami
+npm run build && npm test
+cd packages/ledger-core && npm publish --access public --dry-run && npm publish --access public
+cd ../edt && npm publish --access public --dry-run && npm publish --access public
+npx @claims-ledger/edt --help
+```

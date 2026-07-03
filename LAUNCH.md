@@ -21,6 +21,7 @@
 - [x] Public sandbox `isatimur/claims-ledger-sandbox` (fork-me demo)
 - [x] Event ledger #2 — Sean Grove "The New Code" ([live](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025))
 - [x] Event ledger #3 — Eric Zakariasson "Software Factory" ([live](https://fromcopilottocolleague.com/ledgers/cursor-software-factory-2025))
+- [x] Event ledger #4 — Joel Hron "Trustworthy Agents" ([live](https://fromcopilottocolleague.com/ledgers/joel-hron-trustworthy-agents-2025))
 - [x] Launch amplification drafts — `docs/PRODUCT-HUNT.md`, `docs/X-THREAD.md`, `docs/REDDIT-r-programming.md`
 - [x] Badge on book lab README (shields endpoint from `edt verify`)
 - [ ] Badge on 3–5 friendly repos (`img.claims-ledger.dev` — Cloudflare Worker, Phase 2)

@@ -1,0 +1,122 @@
+[
+  {
+    "claim_id": "claims#1",
+    "text": "The north star has shifted from helpfulness to productive output",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "joel-hron-trustworthy-agents-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://kDEvo2__Ijg 00:00:54.800 → 00:00:57.280",
+        "confidence": "high",
+        "label": "Joel Hron, Thomson Reuters",
+        "quote": "from helpfulness to productive"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "kDEvo2__Ijg",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#2",
+    "text": "Systems are now expected to produce output and make judgments and decisions",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "joel-hron-trustworthy-agents-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://kDEvo2__Ijg 00:03:44.000 → 00:03:48.560",
+        "confidence": "high",
+        "label": "Joel Hron, Thomson Reuters",
+        "quote": "we're asking AI systems to now produce output and produce judgments and decisions"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "kDEvo2__Ijg",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#3",
+    "text": "Human oversight works best when agency dials are tuned, not maximized",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "joel-hron-trustworthy-agents-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://kDEvo2__Ijg 00:04:33.280 → 00:04:36.320",
+        "confidence": "high",
+        "label": "Joel Hron, Thomson Reuters",
+        "quote": "dial these agency dials far up."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "kDEvo2__Ijg",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#4",
+    "text": "Agency is not binary but a lever you can dial up or down",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "joel-hron-trustworthy-agents-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://kDEvo2__Ijg 00:16:25.279 → 00:16:28.160",
+        "confidence": "high",
+        "label": "Joel Hron, Thomson Reuters",
+        "quote": "a binary thing but as a lever that you can dial"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "kDEvo2__Ijg",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#5",
+    "text": "Autonomous systems must have bounded authority before they can earn trust",
+    "support_level": "moderate",
+    "candidate_scopes": [
+      "event-ledger",
+      "joel-hron-trustworthy-agents-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://kDEvo2__Ijg 00:03:44.000 → 00:03:48.560",
+        "confidence": "high",
+        "label": "Joel Hron, Thomson Reuters",
+        "quote": "we're asking AI systems to now produce output and produce judgments and decisions"
+      }
+    ],
+    "caveats": "Book synthesis claim — anchored to this talk as primary evidence.",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "kDEvo2__Ijg",
+      "sample": true
+    }
+  }
+]

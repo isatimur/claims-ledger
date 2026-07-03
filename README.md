@@ -108,6 +108,7 @@ Sample ledgers (Books of Truth — honestly labeled corpus samples):
 |------|--------|------|
 | [Harness Engineering — Ryan Lopopolo, OpenAI](examples/ledgers/openai-harness-engineering-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025) |
 | [The New Code — Sean Grove, OpenAI](examples/ledgers/sean-grove-new-code-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/sean-grove-new-code-2025) |
+| [Building Your Own Software Factory — Eric Zakariasson, Cursor](examples/ledgers/cursor-software-factory-2025/) | 5 | [view](https://fromcopilottocolleague.com/ledgers/cursor-software-factory-2025) |
 
 **Try in 30 seconds:** fork [claims-ledger-sandbox](https://github.com/isatimur/claims-ledger-sandbox) · Action namespace: [`isatimur/auto-ledger-verify@v1`](https://github.com/isatimur/auto-ledger-verify)
 

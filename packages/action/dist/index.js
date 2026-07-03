@@ -635,6 +635,27 @@ function renderProposedClaims(claims, rejected) {
   return lines.join("\n");
 }
 
+// ../ledger-core/dist/badge.js
+function buildBadge(claimCount, report) {
+  const verifiable = report.fresh + report.stale;
+  let message;
+  let color;
+  if (report.stale > 0) {
+    message = `${claimCount} anchored \xB7 ${report.fresh}/${verifiable} fresh \xB7 ${report.stale} stale`;
+    color = "red";
+  } else if (verifiable > 0) {
+    message = `${claimCount} anchored \xB7 ${report.fresh}/${verifiable} fresh`;
+    color = "brightgreen";
+  } else if (report.unverifiable > 0) {
+    message = `${claimCount} anchored \xB7 ${report.unverifiable} unverifiable offline`;
+    color = "orange";
+  } else {
+    message = "no claims yet";
+    color = "lightgrey";
+  }
+  return { schemaVersion: 1, label: "claims", message, color, cacheSeconds: 3600 };
+}
+
 // ../ledger-core/dist/report.js
 function claimLine(c) {
   const out = [`### ${c.claim_id} \u2014 ${c.text}  [${c.support_level}]`];
@@ -891,6 +912,12 @@ async function runAction(workspace, inputs) {
   fs2.mkdirSync(path3.dirname(path3.join(workspace, reportPath)), { recursive: true });
   fs2.writeFileSync(path3.join(workspace, reportPath), report, "utf-8");
   const checkRun = buildCheckRunPayload(diff, verify, ctx);
+  const badgePath = path3.join(path3.dirname(inputs.ledgerPath), "badge.json");
+  fs2.writeFileSync(
+    path3.join(workspace, badgePath),
+    JSON.stringify(buildBadge(headClaims.length, verify), null, 2) + "\n",
+    "utf-8"
+  );
   const failureReasons = [];
   if (inputs.failOn.has("stale-anchor") && verify.stale > 0) {
     failureReasons.push(`${verify.stale} stale anchor(s)`);

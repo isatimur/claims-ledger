@@ -78,12 +78,22 @@ describe("edt end-to-end", () => {
 
     expect(cmdVerify(root, io, { gate: true })).toBe(EXIT.OK);
 
+    // verify regenerates the shields endpoint badge
+    const badge = JSON.parse(fs.readFileSync(path.join(root, ".ledger/badge.json"), "utf-8"));
+    expect(badge).toMatchObject({
+      schemaVersion: 1,
+      label: "claims",
+      message: "1 anchored · 1/1 fresh",
+      color: "brightgreen",
+    });
+
     // break the anchor: reword the anchored line beyond the fuzzy threshold
     fs.writeFileSync(
       path.join(root, "src/session.ts"),
       ["// completely different file now", "export function nothing() {}", ""].join("\n"),
     );
     expect(cmdVerify(root, io, { gate: true })).toBe(EXIT.STALE_ANCHOR);
+    expect(JSON.parse(fs.readFileSync(path.join(root, ".ledger/badge.json"), "utf-8")).color).toBe("red");
 
     // move the quoted line to another file — reanchor should follow it
     fs.writeFileSync(

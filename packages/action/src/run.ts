@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { execFileSync } from "node:child_process";
 import {
+  buildBadge,
   buildCheckRunPayload,
   diffLedgers,
   extractClaims,
@@ -225,6 +226,15 @@ export async function runAction(workspace: string, inputs: ActionInputs): Promis
   fs.writeFileSync(path.join(workspace, reportPath), report, "utf-8");
 
   const checkRun = buildCheckRunPayload(diff, verify, ctx);
+
+  // regenerate the shields endpoint badge next to the ledger (an artifact in
+  // CI; committed when maintainers run `edt verify` locally)
+  const badgePath = path.join(path.dirname(inputs.ledgerPath), "badge.json");
+  fs.writeFileSync(
+    path.join(workspace, badgePath),
+    JSON.stringify(buildBadge(headClaims.length, verify), null, 2) + "\n",
+    "utf-8",
+  );
 
   // fail-on gate matrix
   const failureReasons: string[] = [];

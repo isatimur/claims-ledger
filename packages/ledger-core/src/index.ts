@@ -7,5 +7,6 @@ export * from "./verify.js";
 export * from "./differ.js";
 export * from "./panel.js";
 export * from "./extract.js";
+export * from "./badge.js";
 export * from "./trace.js";
 export * from "./report.js";

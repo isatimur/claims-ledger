@@ -63,6 +63,8 @@ describe("action verify mode", () => {
     expect(r.checkRun.name).toBe("claims-ledger/verify");
     expect(fs.existsSync(path.join(root, ".ledger/ledger-report.md"))).toBe(true);
     expect(r.report).toContain("claims");
+    const badge = JSON.parse(fs.readFileSync(path.join(root, ".ledger/badge.json"), "utf-8"));
+    expect(badge).toMatchObject({ schemaVersion: 1, label: "claims", color: "brightgreen" });
   });
 
   it("stale anchor: action_required, annotation on the anchored file, fail-on trips", async () => {

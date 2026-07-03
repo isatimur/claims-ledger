@@ -42,10 +42,24 @@ trace: edt-2026-07-02-481
 
 ## The badge — the viral loop
 
+**Shipped today (zero infra):** `edt verify` writes `.ledger/badge.json` in the
+[shields endpoint schema](https://shields.io/badges/endpoint-badge). Commit it, then:
+
+```markdown
+[![Claims verified](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FOWNER%2FREPO%2Fmain%2F.ledger%2Fbadge.json)](.ledger/claims.md)
+```
+
+Renders `claims | N anchored · F/T fresh` — red when anything is stale, orange when the ledger
+is only verifiable online (transcript anchors offline), never green-washed.
+
+**Phase 2 (hosted):** a ~100-LoC Cloudflare Worker at `img.claims-ledger.dev/badge/OWNER/REPO`
+reads each repo's committed `.ledger/ledger.json` via raw.githubusercontent (cached 1h, no DB —
+the ledger file *is* the API) and serves the same message format, so READMEs migrate by swapping
+the URL:
+
 ```markdown
 [![Claims verified](https://img.claims-ledger.dev/badge/OWNER/REPO)](https://claims-ledger.dev/r/OWNER/REPO)
 ```
 
-Renders `claims 54 anchored · 198/199 fresh` per-repo, links to the hosted ledger. Free,
-flattering (proves your docs are maintained), and every impression is an ad to exactly the
+Free, flattering (proves your docs are maintained), and every impression is an ad to exactly the
 audience that cares.

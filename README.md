@@ -2,7 +2,13 @@
 
 > **Every claim in your docs, PRs, and agent decisions carries a machine-verifiable pointer to its source — a commit, a doc section, a transcript timestamp — and CI fails when the pointer goes stale.**
 
-[![Claims verified](https://img.shields.io/badge/claims-anchored%20%C2%B7%20fresh-orange)](/.ledger/claims.md) <!-- badge service (img.claims-ledger.dev) lands in Phase 2 -->
+[![Claims verified](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fisatimur%2Fclaims-ledger%2Fmain%2F.ledger%2Fbadge.json)](.ledger/claims.md)
+
+`edt verify` writes [`.ledger/badge.json`](.ledger/badge.json) (a static
+[shields.io endpoint](https://shields.io/badges/endpoint-badge)) — commit it and any repo gets the
+live badge with zero infrastructure. The hosted per-repo badge (`img.claims-ledger.dev`, a
+Cloudflare Worker reading each repo's committed ledger) lands in Phase 2 with the same message
+format.
 
 ## Quickstart
 
@@ -98,7 +104,12 @@ where each of the 199 anchors is clickable to the exact second of the talk.
 
 ## Status
 
-Phase 1 (CLI + core) and the Action's verify mode are real and tested. LLM claim extraction,
-MCP server (`edt mcp serve`), the hosted viewer, and the badge service are on the
-[roadmap](LAUNCH.md). Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the
+Real and tested as of v0.2.0: the CLI + core, the Action's verify **and extract** modes
+(LLM claim mining with anti-fabrication quote resolution), the cross-family **judge panel**
+(OpenRouter: Llama-3.3 / Qwen-2.5 / DeepSeek — median verdict, spread>20 flags), the
+**MCP server** (`edt mcp serve`: `ledger_search`, `trace_add_decision`, `trace_score`,
+`anchor_verify`, `ledger_claims`), and the **badge** (`.ledger/badge.json`, shields endpoint).
+Everything LLM-backed degrades gracefully without `OPENROUTER_API_KEY` — skip and flag, never
+fabricate. The hosted viewer and badge service are next on the [roadmap](LAUNCH.md).
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the
 [good first issues](docs/good-first-issues.md).

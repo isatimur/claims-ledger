@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import {
   EXIT,
+  buildBadge,
   diffLedgers,
   mergePanelScores,
   newTrace,
@@ -247,6 +248,17 @@ export function cmdVerify(root: string, io: Io, opts: VerifyOpts): number {
   if (opts.count) {
     io.out(String(report.stale));
     return opts.gate && report.exitCode !== EXIT.OK ? report.exitCode : EXIT.OK;
+  }
+
+  // shields.io endpoint badge — regenerated on every full verify so the
+  // committed .ledger/badge.json always reflects the last verified state
+  if (!opts.onlyTouched && fs.existsSync(path.join(root, LEDGER_DIR))) {
+    const badge = buildBadge(claims.length, report);
+    fs.writeFileSync(
+      path.join(root, LEDGER_DIR, "badge.json"),
+      JSON.stringify(badge, null, 2) + "\n",
+      "utf-8",
+    );
   }
 
   const total = report.fresh + report.stale + report.unverifiable;

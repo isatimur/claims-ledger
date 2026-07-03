@@ -27,6 +27,9 @@ Usage:
   edt reanchor <claims#N>                   resolver cascade against current tree
   edt render --format pr-body|report        emit the PR body block / report
   edt export --format ledger-json           build .ledger/ledger.json
+  edt mcp serve                             MCP server on stdio (ledger_search,
+                                            trace_add_decision, trace_score,
+                                            anchor_verify, ledger_claims)
 
 Gate exit codes: 0 ok · 10 tentative · 11 stale anchor · 12 panel spread > 20
                  13 trace missing · 2 internal error (never gates)`;
@@ -161,6 +164,17 @@ export async function main(argv: string[]): Promise<number> {
           format: str(p, "format") ?? "ledger-json",
           ...(str(p, "trace") ? { trace: str(p, "trace")! } : {}),
         });
+
+      case "mcp": {
+        if (sub === "serve") {
+          const { serveMcp } = await import("./mcp.js");
+          await serveMcp(root);
+          // keep the process alive for the stdio transport
+          return await new Promise<number>(() => {});
+        }
+        io.err("usage: edt mcp serve");
+        return 1;
+      }
 
       case "help":
       case undefined:

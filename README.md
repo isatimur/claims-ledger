@@ -103,7 +103,7 @@ node scripts/event-ledger.mjs am_oeAoUhew "Harness Engineering"
 # → examples/ledgers/openai-harness-engineering-2025/
 ```
 
-Sample ledger: [OpenAI Harness Engineering (Ryan Lopopolo)](examples/ledgers/openai-harness-engineering-2025/) — 5 claims anchored to the second, sourced from the book corpus (honestly labeled).
+Sample ledger: [OpenAI Harness Engineering (Ryan Lopopolo)](examples/ledgers/openai-harness-engineering-2025/) — 5 claims anchored to the second, sourced from the book corpus (honestly labeled). **Live:** [fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025](https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025).
 
 ## Architecture
 

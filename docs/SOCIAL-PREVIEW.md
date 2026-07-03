@@ -1,0 +1,54 @@
+# Social preview (Open Graph) — manual upload
+
+GitHub does not expose social preview image upload via `gh repo edit`. Set these in **Settings → General → Social preview** on https://github.com/isatimur/claims-ledger.
+
+## Image spec
+
+| Field | Value |
+|-------|--------|
+| **Dimensions** | 1280 × 640 px (2:1) |
+| **Format** | PNG or JPG |
+| **Safe zone** | Keep title and logo inside center 1200 × 600 — edges may crop on some clients |
+
+### Recommended artwork
+
+Terminal screenshot of `./demo/scenario.sh` showing the verify → stale anchor (exit 11) → reanchor → verify pass loop. Overlay text:
+
+- **Title:** claims-ledger
+- **Tagline:** No anchor, no claim.
+
+Alternative: orange anchor icon on dark background matching Action branding (`branding.color: orange` in `action.yml`).
+
+## Description (≤350 chars)
+
+Use the **repository description** (already set via CLI):
+
+```
+Source-anchored claims ledgers for codebases and AI agents — CI-gated evidence verification. No anchor, no claim.
+```
+
+For the **social preview description** field (separate from repo description), use the longer Marketplace copy:
+
+```
+Every claim in your docs and agent PRs carries a machine-verifiable pointer to its source. CI fails when the pointer goes stale. GitHub Action + CLI + MCP. Self-hosting from day one.
+```
+
+## Topics (set via CLI)
+
+```
+github-actions, ai-agents, documentation, verification, devtools, llm, claims, evidence, mcp-server
+```
+
+```bash
+gh repo edit isatimur/claims-ledger \
+  --description "Source-anchored claims ledgers for codebases and AI agents — CI-gated evidence verification. No anchor, no claim." \
+  --add-topic github-actions --add-topic ai-agents --add-topic documentation \
+  --add-topic verification --add-topic devtools --add-topic llm \
+  --add-topic claims --add-topic evidence --add-topic mcp-server
+```
+
+## Live ledger demo (book site)
+
+After deploy, link the README to:
+
+https://fromcopilottocolleague.com/ledgers/openai-harness-engineering-2025

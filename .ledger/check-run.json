@@ -1,0 +1,10 @@
+{
+  "name": "claims-ledger/verify",
+  "head_sha": "",
+  "conclusion": "success",
+  "output": {
+    "title": "5 new claims",
+    "summary": "0 → 5 claims · anchors verified: 5/5 fresh",
+    "annotations": []
+  }
+}

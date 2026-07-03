@@ -1,34 +1,12 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+import{createRequire}from'node:module';const require=createRequire(import.meta.url);
 
 // src/main.ts
-var fs3 = __toESM(require("node:fs"), 1);
+import * as fs3 from "node:fs";
 
 // src/run.ts
-var fs2 = __toESM(require("node:fs"), 1);
-var path2 = __toESM(require("node:path"), 1);
-var import_node_child_process = require("node:child_process");
+import * as fs2 from "node:fs";
+import * as path2 from "node:path";
+import { execFileSync } from "node:child_process";
 
 // ../ledger-core/dist/types.js
 var EXIT = {
@@ -281,8 +259,8 @@ function resolveQuote(quote, content, threshold = FUZZY_THRESHOLD) {
 }
 
 // ../ledger-core/dist/verify.js
-var fs = __toESM(require("node:fs"), 1);
-var path = __toESM(require("node:path"), 1);
+import * as fs from "node:fs";
+import * as path from "node:path";
 function readIfExists(p) {
   try {
     return fs.readFileSync(p, "utf-8");
@@ -619,7 +597,7 @@ function buildCheckRunPayload(diff, verify, ctx) {
 // src/run.ts
 function git(cwd, args) {
   try {
-    return (0, import_node_child_process.execFileSync)("git", args, { cwd, encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    return execFileSync("git", args, { cwd, encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
   } catch {
     return null;
   }

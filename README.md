@@ -73,6 +73,29 @@ Anchors with quotes that don't resolve are **rejected at add time**. This repo e
 food: see [`.ledger/claims.md`](.ledger/claims.md) — the README claims above are anchored and
 CI-gated.
 
+## Flagship dataset
+
+The first public `.ledger/` is the book's own Claims Ledger — the corpus that proved the
+discipline before it was a tool. `ledger-core` parses it byte-compatibly and reproduces the
+book's committed stats exactly:
+
+```
+$ edt verify        # against the book's Claims Ledger, offline
+anchors: 0/199 fresh · 199 unverifiable (never gate)
+· claims#1 yt://kDEvo2__Ijg 00:00:54.800 → 00:00:57.280
+    no local transcripts dir (.ledger/transcripts); needs network
+...
+$ echo $?
+0
+```
+
+**54 claims** (44 strong / 10 moderate) · **199 anchors** (198 high-confidence) · a
+**794-video** practitioner corpus. Every `yt://` anchor is honestly reported as
+*unverifiable offline* rather than assumed fresh — unverifiable never gates, only *stale*
+does (flag, don't fabricate). Browse the dataset interactively at
+[fromcopilottocolleague.com/read/graph](https://fromcopilottocolleague.com/read/graph),
+where each of the 199 anchors is clickable to the exact second of the talk.
+
 ## Status
 
 Phase 1 (CLI + core) and the Action's verify mode are real and tested. LLM claim extraction,

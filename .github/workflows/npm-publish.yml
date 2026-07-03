@@ -1,4 +1,5 @@
-# Manual npm publish — run after adding NPM_TOKEN secret (Automation → npm automation token).
+# Manual npm publish — NPM_TOKEN must be a Granular Access Token with Read+Write on @claims-ledger
+# and "Bypass two-factor authentication for automation" enabled. See docs/NPM-PUBLISH.md.
 # Publishes @claims-ledger/ledger-core then @claims-ledger/edt@1.0.0.
 name: npm-publish
 on:

@@ -1,6 +1,6 @@
 # npm publish — @claims-ledger/edt
 
-**Status (Jul 3, 2026):** GitHub secret `NPM_TOKEN` is set. npm org `@claims-ledger` must be created at https://www.npmjs.com/org/create and added to the token's allowed scopes before publish succeeds.
+**Status (Jul 3, 2026):** `@claims-ledger` org **does not exist on npm yet** — create it first (Step 0). Packages are not published. Publishing scoped packages also requires **2FA + OTP** or a **granular access token with publish scope** (see Troubleshooting).
 
 ---
 
@@ -12,20 +12,23 @@
 | Version `1.0.0` aligned with git tag | ✅ |
 | `bin.edt` → `dist/cli.js` with shebang | ✅ |
 | `files: ["dist"]` — only compiled output shipped | ✅ |
-| `@claims-ledger/ledger-core` dependency at `1.0.0` | ✅ (must publish core first or use `publishConfig.access`) |
+| `@claims-ledger/ledger-core` dependency at `1.0.0` | ✅ (must publish core first) |
 | Build passes | Run `npm run build` |
 | Tests pass | Run `npm test` |
-| Dry-run clean | Run steps below |
+| npm org `@claims-ledger` exists | ❌ create at Step 0 |
+| Auth ready for publish (2FA or granular token) | See Troubleshooting |
 
 ---
 
-## Step 0 — Create npm org (if needed)
+## Step 0 — Create npm org (required)
 
-The `@claims-ledger` scope does not exist on npm yet.
+The `@claims-ledger` scope does **not** exist on npm yet. You must create it before any publish:
 
-1. Log in: `npm login`
-2. Create org at https://www.npmjs.com/org/create — name: `claims-ledger`
-3. Or publish as unscoped `edt-cli` (not recommended — breaks README `npx @claims-ledger/edt` references)
+1. Log in: `npm login` (as org owner, e.g. `isatimur`)
+2. Create org at **https://www.npmjs.com/org/create** — name: **`claims-ledger`**
+3. Confirm: `npm org ls claims-ledger` (should list members, not 404)
+
+Without this org, publish fails with scope/permission errors even if login succeeds.
 
 ---
 
@@ -37,10 +40,17 @@ The `@claims-ledger` scope does not exist on npm yet.
 cd packages/ledger-core
 npm run build
 npm publish --access public --dry-run   # inspect tarball
-npm publish --access public
+npm publish --access public             # add --otp=123456 if using 2FA
 ```
 
 Verify: `npm view @claims-ledger/ledger-core version`
+
+Or use the helper script (after Step 0 + auth setup):
+
+```bash
+NPM_OTP=123456 ./scripts/npm-publish.sh   # if 2FA enabled
+./scripts/npm-publish.sh                    # if NPM_TOKEN is a granular publish token
+```
 
 ---
 
@@ -73,7 +83,7 @@ package/dist/*.js.map
 
 ```bash
 cd packages/edt
-npm publish --access public
+npm publish --access public               # add --otp=123456 if using 2FA
 ```
 
 Verify:
@@ -111,37 +121,87 @@ npm publish --access public   # in each package directory
 
 ## CI publish (manual dispatch)
 
-Workflow added: [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)
+Workflow: [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)
 
-1. Create npm org `@claims-ledger` at https://www.npmjs.com/org/create
-2. Generate an **Automation** token at https://www.npmjs.com/settings/~/tokens
-3. Add repo secret **`NPM_TOKEN`** (Settings → Secrets → Actions)
+1. Create npm org `@claims-ledger` at https://www.npmjs.com/org/create (Step 0)
+2. Create a **Granular Access Token** at https://www.npmjs.com/settings/~/tokens:
+   - Type: **Granular Access Token**
+   - Packages and scopes → **Read and write**
+   - Select org **`@claims-ledger`**
+   - Enable **“Bypass two-factor authentication for automation”** if shown
+3. Add repo secret **`NPM_TOKEN`** = that granular publish token (Settings → Secrets → Actions)
+   - **Not** a classic read-only token
+   - **Not** a session token from `npm login`
 4. Run **Actions → npm-publish → Run workflow** on `main`
 
 Publishes `ledger-core` first, then `edt`. Verify with `npm view @claims-ledger/edt`.
 
-Local fallback after `npm login`:
+Local fallback after auth is configured:
 
 ```bash
-./scripts/npm-publish.sh
+chmod +x scripts/npm-publish.sh && ./scripts/npm-publish.sh
 ```
 
 ---
 
-## Blockers right now
+## Troubleshooting: 403 Forbidden — “Two-factor authentication or granular access token with bypass 2fa enabled is required to publish packages”
 
-1. **npm org `@claims-ledger` does not exist** — create before publish
-2. **Not logged in locally** — `npm whoami` returns 401; use CI workflow with `NPM_TOKEN` or `npm login`
-3. **`ledger-core` must publish first** — edt depends on it at registry version, not workspace link
+This is the expected error when you run `npm login` and try to publish a **scoped** package without meeting npm’s publish auth policy.
 
-Do **not** publish until user confirms org ownership and HN timing (optional: publish same morning as HN so `npx @claims-ledger/edt init` works in Show HN comments).
+**`npm login` alone is NOT sufficient** if your account/org requires 2FA for publish.
+
+### Option A — Enable 2FA on your npm account (interactive local publish)
+
+1. Enable 2FA at https://www.npmjs.com/settings/~/security (Authorization and Publishing, or both)
+2. Publish with a one-time password from your authenticator app:
+
+```bash
+npm publish --access public --otp=123456
+# or via helper script:
+NPM_OTP=123456 ./scripts/npm-publish.sh
+```
+
+### Option B — Granular Access Token (recommended for CI and scripted publish)
+
+1. Go to https://www.npmjs.com/settings/~/tokens → **Generate New Token** → **Granular Access Token**
+2. Configure:
+   - **Packages and scopes** → **Read and write**
+   - **Organizations** → select **`@claims-ledger`**
+   - Enable **“Bypass two-factor authentication for automation”** when available
+3. Copy the token once (starts with `npm_`) and use it as `NPM_TOKEN`:
+
+```bash
+export NPM_TOKEN=npm_xxxxxxxx   # do not commit this
+npm whoami                        # should print your username
+./scripts/npm-publish.sh
+```
+
+For CI, store the same token in GitHub secret **`NPM_TOKEN`**.
+
+**Rotate any token that was pasted in chat or committed by mistake.**
+
+### Option C — GitHub Actions `NPM_TOKEN` must be a publish token
+
+The workflow secret must be the **granular publish token** from Option B:
+
+- ✅ Granular token, Read and write, `@claims-ledger` scope, bypass 2FA enabled
+- ❌ Classic **read-only** token
+- ❌ Token from `npm login` session (not valid in CI)
+
+### Other blockers
+
+| Symptom | Fix |
+|---------|-----|
+| `Scope not found` / org 404 | Complete **Step 0** — create org `claims-ledger` |
+| `404` on `npm view @claims-ledger/ledger-core` | Normal before first publish; publish core first |
+| edt publish fails on missing dependency | Publish `@claims-ledger/ledger-core` before `@claims-ledger/edt` |
 
 ---
 
-## One-liner (after login)
+## One-liner (after org + auth)
 
 ```bash
-chmod +x scripts/npm-publish.sh && ./scripts/npm-publish.sh
+chmod +x scripts/npm-publish.sh && NPM_OTP=123456 ./scripts/npm-publish.sh
 ```
 
 Or step-by-step:
@@ -149,8 +209,11 @@ Or step-by-step:
 ```bash
 npm login
 npm whoami
+npm org ls claims-ledger          # must not 404
 npm run build && npm test
-cd packages/ledger-core && npm publish --access public --dry-run && npm publish --access public
-cd ../edt && npm publish --access public --dry-run && npm publish --access public
+cd packages/ledger-core && npm publish --access public --otp=123456
+cd ../edt && npm publish --access public --otp=123456
 npx @claims-ledger/edt --help
 ```
+
+Do **not** publish until org exists and auth (2FA or granular token) is configured.

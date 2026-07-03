@@ -91,6 +91,8 @@ export function Home() {
           ]}
         />
         <p className="mt-4 text-sm text-[var(--color-muted)]">
+          Until the npm package is live, clone the repo and run{" "}
+          <code className="text-[var(--color-accent)]">npm ci && npm run build && npm exec -w @claims-ledger/edt edt init</code>.
           Gate every PR with zero local install:{" "}
           <code className="text-[var(--color-accent)]">uses: isatimur/claims-ledger@v1</code>
         </p>

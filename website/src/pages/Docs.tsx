@@ -40,6 +40,11 @@ export function Docs() {
           <code>edt init</code> scaffolds <code>.ledger/claims.md</code>, <code>ledger.json</code>, and a pre-commit hook.
           Write claims with anchor URIs and verbatim quotes. <code>edt verify --gate</code> re-resolves every quote.
         </p>
+        <p className="mt-3 text-sm text-[var(--color-muted)]">
+          <strong className="text-[var(--color-text)]">npm not published yet?</strong>{" "}
+          <code className="text-[var(--color-accent)]">git clone https://github.com/isatimur/claims-ledger.git</code>, then{" "}
+          <code className="text-[var(--color-accent)]">npm ci && npm run build && npm exec -w @claims-ledger/edt edt init</code>.
+        </p>
       </section>
 
       <section className="mb-14">

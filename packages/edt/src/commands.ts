@@ -172,9 +172,10 @@ export async function cmdTraceScore(
   }
   let flagged = 0;
   for (const d of found.trace.decisions) {
+    const evidence = d.anchors.map((a) => a.quote ?? a.ref);
     const scores = await panel.score({
       text: d.text,
-      evidence: d.anchors.map((a) => a.quote ?? a.ref),
+      evidence,
       dimension: "claim_defensibility",
     });
     const merged = mergePanelScores(scores);
@@ -186,9 +187,25 @@ export async function cmdTraceScore(
     d.support_level = supportFromPanel(merged);
     if (merged.flagged) flagged++;
     io.out(
-      `${d.decision_id}: panel ${merged.scores.join(" / ")} → median ${merged.median}` +
+      `${d.decision_id}: defensibility ${merged.scores.join(" / ")} → median ${merged.median}` +
         (merged.flagged ? ` ⚠ spread ${merged.spread} > 20 — human look required` : ""),
     );
+
+    // second dimension: evidence_density — reported and persisted, never
+    // gates on its own (defensibility drives support_level)
+    const densityScores = await panel.score({
+      text: d.text,
+      evidence,
+      dimension: "evidence_density",
+    });
+    const density = mergePanelScores(densityScores);
+    if (density) {
+      d.panel_evidence = density;
+      io.out(
+        `${d.decision_id}: evidence density ${density.scores.join(" / ")} → median ${density.median}` +
+          (density.flagged ? ` ⚠ spread ${density.spread} > 20` : ""),
+      );
+    }
   }
   found.trace.summary = recomputeSummary(found.trace);
   saveTrace(path.isAbsolute(found.path) ? found.path : path.join(root, found.path), found.trace);

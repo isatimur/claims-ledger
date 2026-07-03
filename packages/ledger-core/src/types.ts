@@ -79,7 +79,10 @@ export interface Decision {
   kind: DecisionKind;
   support_level: SupportLevel;
   anchors: AnchorRef[];
+  /** claim_defensibility panel — drives support_level */
   panel?: PanelResult;
+  /** evidence_density panel — reported, never gates on its own */
+  panel_evidence?: PanelResult;
   regression_risk?: { level: "low" | "medium" | "high"; basis: string };
 }
 

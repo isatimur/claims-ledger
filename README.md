@@ -6,8 +6,7 @@
 [![CI](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml/badge.svg)](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml)
 [![npm](https://img.shields.io/npm/v/@claims-ledger/edt)](https://www.npmjs.com/package/@claims-ledger/edt)
 
-<!-- Replace with recorded GIF — see demo/RECORDING.md -->
-[![60-second demo — click to run script](https://img.shields.io/badge/demo-run%20%60demo%2Fscenario.sh%60-blue)](demo/scenario.sh)
+[![60-second demo](demo/demo.gif)](demo/scenario.sh)
 
 ## Try in 60 seconds
 
@@ -30,10 +29,10 @@ Or gate every PR with zero local install:
 
 ```yaml
 # .github/workflows/ledger.yml
-- uses: isatimur/auto-ledger-verify@v1
+- uses: isatimur/claims-ledger@v1
 ```
 
-Copy from [`examples/ledger.yml`](examples/ledger.yml) · sandbox template in [`examples/sandbox/`](examples/sandbox/).
+Copy from [`examples/ledger.yml`](examples/ledger.yml) · sandbox template in [`examples/sandbox/`](examples/sandbox/). Optional mirror namespace: [`docs/ACTION-MIRROR.md`](docs/ACTION-MIRROR.md).
 
 ---
 
@@ -77,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: isatimur/auto-ledger-verify@v1
+      - uses: isatimur/claims-ledger@v1
         with:
           openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY }}  # optional: extract + judge panel
       - uses: actions/upload-artifact@v4
@@ -158,6 +157,6 @@ $ echo $?
 
 ## Status
 
-**v0.3.0** — launch-ready: demo script, event ledger sample, sandbox template, Show HN draft, Marketplace guide, agent skill + hook, community files. Core from v0.2.0: judge panel, extract mode, MCP, badge.
+**v1.0.0** — Marketplace-ready: root `action.yml`, demo GIF, social preview, HN post pack. Core: judge panel, extract mode, MCP, badge, event ledger sample, agent skill.
 
-Show HN: [`docs/SHOW-HN.md`](docs/SHOW-HN.md) · Roadmap: [`LAUNCH.md`](LAUNCH.md) · Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+Show HN: [`docs/HN-POST-READY.txt`](docs/HN-POST-READY.txt) · Marketplace: [`docs/MARKETPLACE.md`](docs/MARKETPLACE.md) · Roadmap: [`LAUNCH.md`](LAUNCH.md)

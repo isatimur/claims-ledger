@@ -1,0 +1,22 @@
+# Optional: mirror Action artifacts to isatimur/auto-ledger-verify on each release.
+# Enable after creating the mirror repo — see docs/ACTION-MIRROR.md
+name: release-action-mirror
+on:
+  push:
+    tags: ['v*']
+jobs:
+  mirror:
+    if: false  # flip to true when mirror repo exists
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p /tmp/release/dist
+          sed 's|packages/action/dist/index.js|dist/index.js|' action.yml > /tmp/release/action.yml
+          cp -r packages/action/dist/* /tmp/release/dist/
+      - uses: softprops/action-gh-release@v2
+        with:
+          repository: isatimur/auto-ledger-verify
+          files: |
+            /tmp/release/action.yml
+            /tmp/release/dist/**

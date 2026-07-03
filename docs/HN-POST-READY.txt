@@ -1,0 +1,83 @@
+# Hacker News — ready to post (DO NOT POST FROM CI)
+
+**Suggested time:** Tuesday **2026-07-07, 07:30 Pacific** (first slot after launch prep; block 48h for comments).
+
+---
+
+## Title (copy-paste)
+
+```
+Show HN: A GitHub Action that fails CI when your docs' claims go stale
+```
+
+---
+
+## URL (copy-paste)
+
+```
+https://github.com/isatimur/claims-ledger
+```
+
+---
+
+## First comment (post within 60 seconds of submission)
+
+```
+Hi HN — Timur here. We built this after anchoring every claim in a book to a 794-video practitioner corpus (evidence graph: https://fromcopilottocolleague.com/read/graph). Same discipline, now for codebases.
+
+The problem: docs rot silently. Someone writes "auth tokens rotate every 24h", a refactor moves rotate.ts, and the sentence becomes fiction. LLMs make this worse — they confidently cite things that moved.
+
+The mechanism:
+
+1. Claims live in .ledger/claims.md (markdown = source of truth).
+2. Every claim has anchors — six schemes: git://, doc://, adr://, gh://, yt://, ts://.
+3. Every anchor carries a verbatim quote. The quote either resolves at the ref or it doesn't. An LLM can hallucinate a justification; it cannot hallucinate a string into a commit.
+4. edt verify --gate re-resolves every quote (exact → fuzzy at 0.87). Stale ⇒ exit 11, CI red.
+5. edt reanchor claims#N follows the quote to its new home.
+
+Try in 60 seconds:
+
+git clone https://github.com/isatimur/claims-ledger
+cd claims-ledger && npm install && npm run build
+./demo/scenario.sh
+
+You'll see: verify passes → break the anchor → exit 11 → reanchor → passes again.
+
+Demo GIF in the README: https://github.com/isatimur/claims-ledger/blob/main/demo/demo.gif
+
+GitHub Action — drop into any repo:
+
+- uses: isatimur/claims-ledger@v1
+
+Verify mode gates stale anchors. Extract mode (with OPENROUTER_API_KEY) mines claims from PR diffs into .ledger/claims.proposed.md — proposals only, never auto-merged.
+
+For agents: edt trace new → add-decision with --anchor + --quote pairs. Fabricated quotes are rejected at add time. Render with edt render --format pr-body — the Action verifies the fenced block server-side.
+
+Exit codes (API, won't change casually):
+- 0 all fresh
+- 10 tentative/unanchored strong claim
+- 11 stale anchor ← the one you'll hit after a refactor
+- 12 judge panel spread >20 (human look)
+- 13 required trace missing
+
+Flagship dataset: 54 claims, 199 anchors, 794 videos — browse the graph: https://fromcopilottocolleague.com/read/graph
+
+Event ledger sample: OpenAI Harness Engineering talk — https://github.com/isatimur/claims-ledger/tree/main/examples/ledgers/openai-harness-engineering-2025
+
+MCP: edt mcp serve exposes ledger_search, trace_add_decision, anchor_verify, etc.
+
+Happy to answer questions on the resolver cascade, the judge panel (3 rival models, median wins, spread>20 flags), or the anti-fabrication design. Code is MIT, self-hosting from day one — this repo gates its own README claims.
+```
+
+---
+
+## Pre-flight checklist
+
+- [x] Demo GIF in README (`demo/demo.gif`)
+- [x] Root `action.yml` + tag `v1.0.0`
+- [ ] Confirm CI green: `gh run list --repo isatimur/claims-ledger --limit 3`
+- [ ] Social preview uploaded (Settings → General → Social preview)
+- [ ] Block 48h for comment responses
+- [ ] Product Hunt T+1 (never same day as HN)
+
+Full draft with alternates: [`SHOW-HN.md`](SHOW-HN.md)

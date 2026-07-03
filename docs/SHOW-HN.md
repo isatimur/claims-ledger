@@ -51,7 +51,7 @@ You'll see: verify passes → break the anchor → exit 11 → reanchor → pass
 **GitHub Action** — drop into any repo:
 
 ```yaml
-- uses: isatimur/auto-ledger-verify@v1
+- uses: isatimur/claims-ledger@v1
 ```
 
 Verify mode gates stale anchors. Extract mode (with `OPENROUTER_API_KEY`) mines claims from PR diffs into `.ledger/claims.proposed.md` — proposals only, never auto-merged.

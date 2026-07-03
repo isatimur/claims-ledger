@@ -3,13 +3,28 @@
 The agent cannot click "Submit" on your behalf. Follow this checklist to list
 **Auto-Ledger & Verify** on the GitHub Marketplace.
 
+## Automation status (2026-07-03)
+
+| Item | Status |
+|------|--------|
+| Repo public | ✅ https://github.com/isatimur/claims-ledger |
+| Root `action.yml` | ✅ [`action.yml`](../action.yml) → `packages/action/dist/index.js` |
+| `packages/action/` dev path | ✅ CI uses `./packages/action` |
+| Semver release | ✅ tag `v1.0.0` + floating `v1` |
+| Branding (anchor / orange) | ✅ in `action.yml` |
+| README Marketplace section | ✅ copy-paste workflow |
+| Demo GIF + social preview | ✅ `demo/demo.gif`, `docs/social-preview.png` |
+| Mirror repo `auto-ledger-verify` | ⏳ optional — see [`ACTION-MIRROR.md`](ACTION-MIRROR.md) |
+| Marketplace Submit button | ❌ manual — https://github.com/marketplace/new |
+| GitHub App (Checks API) | ❌ manual — Step 1 below |
+
 ## Prerequisites
 
-- [ ] Repo is public: https://github.com/isatimur/claims-ledger
-- [ ] Action published with a semver tag (`v1` points at latest stable)
-- [ ] `action.yml` has `branding.icon` and `branding.color` (already set: anchor / orange)
-- [ ] README has a Marketplace section with copy-paste workflow (see below)
-- [ ] At least one green CI run on `main`
+- [x] Repo is public: https://github.com/isatimur/claims-ledger
+- [x] Action published with a semver tag (`v1` points at latest stable)
+- [x] `action.yml` has `branding.icon` and `branding.color` (anchor / orange)
+- [x] README has a Marketplace section with copy-paste workflow
+- [ ] At least one green CI run on `main` after v1.0.0 push (verify before Submit)
 
 ## Step 1 — Create the GitHub App (one-time)
 
@@ -27,24 +42,26 @@ The agent cannot click "Submit" on your behalf. Follow this checklist to list
 
 ## Step 2 — Publish the Action release
 
+Already done for v1.0.0. To refresh floating major:
+
 ```bash
 cd claims-ledger
-git tag v1 -f $(git rev-list -n 1 v0.3.0)   # floating major tag
+git tag v1 -f v1.0.0
 git push origin v1 --force-with-lease
+git push origin v1.0.0
 ```
 
-Consumers pin `@v1` for auto-updates within major, or `@v0.3.0` for exact.
+Consumers pin `@v1` for auto-updates within major, or `@v1.0.0` for exact.
 
 ## Step 3 — Draft the Marketplace listing
 
 1. Open https://github.com/marketplace/new
 2. Choose **Actions**
-3. **Action repository:** `isatimur/claims-ledger` (path: `packages/action/action.yml` if monorepo — you may need a dedicated `isatimur/auto-ledger-verify` repo that re-exports, or list from the monorepo root if GitHub allows)
+3. **Action repository:** `isatimur/claims-ledger` (root `action.yml` — monorepo-ready)
 
-> **Monorepo note:** GitHub Marketplace typically expects `action.yml` at repo root.
-> Options:
-> - **A (recommended):** Create `isatimur/auto-ledger-verify` repo mirroring `packages/action/dist` + root `action.yml` (release bot copies on tag).
-> - **B:** Symlink / composite — document in README that consumers use `isatimur/claims-ledger/packages/action@main` until the mirror repo exists.
+> **Namespace note:** Examples may say `isatimur/auto-ledger-verify@v1`. That slug requires
+> a mirror repo — see [`ACTION-MIRROR.md`](ACTION-MIRROR.md). Listing from this monorepo uses
+> `isatimur/claims-ledger@v1`.
 
 4. **Display name:** Auto-Ledger & Verify
 5. **Tagline:** Fail CI when your docs' claims go stale — source-anchored claims for code, docs, and agent decisions.
@@ -70,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: isatimur/auto-ledger-verify@v1
+      - uses: isatimur/claims-ledger@v1
         with:
           mode: verify
           openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY }}  # optional
@@ -88,31 +105,21 @@ jobs:
 
 ## Optional — dedicated Action repo automation
 
-If you split `isatimur/auto-ledger-verify`:
-
-```yaml
-# .github/workflows/release-action.yml in claims-ledger
-on:
-  push:
-    tags: ['v*']
-jobs:
-  mirror:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: |
-          cp packages/action/action.yml /tmp/
-          cp -r packages/action/dist /tmp/dist
-      - uses: softprops/action-gh-release@v2
-        with:
-          repository: isatimur/auto-ledger-verify
-          files: /tmp/**
-```
+If you split `isatimur/auto-ledger-verify`, see [`.github/workflows/release-action.yml`](../.github/workflows/release-action.yml)
+and [`ACTION-MIRROR.md`](ACTION-MIRROR.md).
 
 ## Topics to set on the repo (Settings → General)
 
 ```
 github-actions, documentation, ci, devops, llm, agents, fact-checking, evidence, markdown, open-source
+```
+
+Or via CLI:
+
+```bash
+gh repo edit isatimur/claims-ledger \
+  --add-topic github-actions --add-topic documentation --add-topic verification \
+  --add-topic devtools --add-topic llm --add-topic claims --add-topic evidence
 ```
 
 ## Social preview (Settings → General → Social preview)
@@ -123,4 +130,4 @@ github-actions, documentation, ci, devops, llm, agents, fact-checking, evidence,
 Every claim in your docs and agent PRs carries a machine-verifiable pointer to its source. CI fails when the pointer goes stale. GitHub Action + CLI + MCP. Self-hosting from day one.
 ```
 
-Upload a 1280×640 image: terminal screenshot of `./demo/scenario.sh` showing exit 11 → reanchor → exit 0.
+Upload [`docs/social-preview.png`](social-preview.png) (1280×640). See [`SOCIAL-PREVIEW.md`](SOCIAL-PREVIEW.md).

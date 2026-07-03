@@ -868,7 +868,7 @@ async function runAction(workspace, inputs) {
         ) + 1;
         const result = await extractClaims(sources, complete, {
           sha,
-          extractedBy: "auto-ledger-verify/0.2.0",
+          extractedBy: "auto-ledger-verify/1.0.0",
           existingClaims: headClaims.map((c) => c.text),
           nextId
         });

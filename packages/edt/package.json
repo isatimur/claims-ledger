@@ -1,6 +1,6 @@
 {
   "name": "@claims-ledger/edt",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "edt \u2014 Evidence Decision Trace. A CLI that makes agents (and humans) anchor every claim and decision to a verifiable source, and fails CI when anchors go stale.",
   "license": "MIT",
   "type": "module",
@@ -18,7 +18,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@claims-ledger/ledger-core": "0.3.0",
+    "@claims-ledger/ledger-core": "1.0.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "zod": "^4.4.3"
   },

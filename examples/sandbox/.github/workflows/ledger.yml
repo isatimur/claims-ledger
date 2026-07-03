@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: isatimur/auto-ledger-verify@v1
+      - uses: isatimur/claims-ledger@v1
         with:
           mode: verify
       - uses: actions/upload-artifact@v4

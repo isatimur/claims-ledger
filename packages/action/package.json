@@ -1,6 +1,6 @@
 {
   "name": "@claims-ledger/action",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
   "description": "auto-ledger-verify \u2014 GitHub Action that diffs the Claims Ledger and fails CI on stale anchors.",
   "license": "MIT",
@@ -11,8 +11,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@claims-ledger/edt": "0.3.0",
-    "@claims-ledger/ledger-core": "0.3.0"
+    "@claims-ledger/edt": "1.0.0",
+    "@claims-ledger/ledger-core": "1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

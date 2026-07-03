@@ -27,7 +27,7 @@ Open a PR that edits `src/config.ts` without updating `.ledger/claims.md` — th
 | File | Purpose |
 |------|---------|
 | `.ledger/claims.md` | One anchored claim about `API_TIMEOUT_MS` |
-| `.github/workflows/ledger.yml` | Runs `isatimur/auto-ledger-verify@v1` on every PR |
+| `.github/workflows/ledger.yml` | Runs `isatimur/claims-ledger@v1` on every PR |
 | `src/config.ts` | The file the claim points at |
 
 ## Break-the-build exercise

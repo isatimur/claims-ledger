@@ -1,33 +1,50 @@
 # Recording the 60-second demo
 
-## Option A: asciinema (recommended for README)
+## What was produced (2026-07-03 launch)
+
+| Artifact | Path | Notes |
+|----------|------|--------|
+| **Animated GIF** | [`demo/demo.gif`](demo.gif) | 5-frame terminal sequence (verify → break → exit 11 → reanchor → pass). Generated with ImageMagick via [`scripts/generate-demo-assets.sh`](../scripts/generate-demo-assets.sh). |
+| **Static screenshot** | [`demo/demo-terminal.png`](demo-terminal.png) | Exit-11 frame — used as fallback / social crops. |
+| **Captured output** | [`demo/output/demo-run.md`](output/demo-run.md) | Full text transcript from `./demo/scenario.sh`. |
+
+README embeds the GIF. No asciinema cast was recorded (`asciinema` / `agg` not installed on the build machine).
+
+To regenerate assets after changing the demo script:
 
 ```bash
-# Install: brew install asciinema  (or apt install asciinema)
-cd /path/to/claims-ledger
-asciinema rec demo.cast -c "./demo/scenario.sh"
-# Upload: asciinema upload demo.cast
-# Embed:  [![asciicast](https://asciinema.org/a/XXXXX.svg)](https://asciinema.org/a/XXXXX)
+./demo/scenario.sh                    # refresh demo-run.md manually if output changed
+./scripts/generate-demo-assets.sh     # rebuild demo.gif + docs/social-preview.png
 ```
 
-## Option B: terminal GIF (for HN / Product Hunt)
+---
+
+## Option A: asciinema (best for interactive README)
 
 ```bash
-# Install: brew install agg terminal-notifier
-./demo/scenario.sh | agg --speed 1.2 demo.gif
+brew install asciinema
+cd claims-ledger
+asciinema rec demo/output/demo.cast -c "./demo/scenario.sh"
+asciinema upload demo/output/demo.cast   # returns https://asciinema.org/a/XXXXX
 ```
 
-Commit `demo.gif` to the repo or host on GitHub releases, then replace the
-placeholder in README:
+Embed:
 
 ```markdown
-[![60-second demo](demo/demo.gif)](demo/scenario.sh)
+[![asciicast](https://asciinema.org/a/XXXXX.svg)](https://asciinema.org/a/XXXXX)
 ```
 
-## Option C: static output (no recording needed)
+## Option B: terminal GIF via agg
 
-The captured run lives in [`demo/output/demo-run.md`](output/demo-run.md).
-Paste it into README or link to it for HN commenters who prefer text.
+```bash
+brew install asciinema agg
+asciinema rec demo/output/demo.cast -c "./demo/scenario.sh"
+agg demo/output/demo.cast demo/demo.gif
+```
+
+## Option C: ImageMagick (no extra installs — used for launch)
+
+See [`scripts/generate-demo-assets.sh`](../scripts/generate-demo-assets.sh).
 
 ## What the demo proves
 

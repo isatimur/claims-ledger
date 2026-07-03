@@ -1,9 +1,9 @@
 # Demo run — captured terminal output
 
-Reproduced by `./demo/scenario.sh` on claims-ledger v0.3.0.
+Reproduced by `./demo/scenario.sh` on claims-ledger v1.0.0 (2026-07-03).
 
 ```
-▸ Demo workspace: /tmp/edt-demo-XXXX
+▸ Demo workspace: /var/folders/…/tmp.XXXX
 
 ▸ edt init
 created .ledger/claims.md
@@ -19,7 +19,7 @@ exit code: 0
 
 ▸ edt verify --gate  (expect exit 11 — stale anchor)
 anchors: 0/1 fresh · 1 stale
-✖ claims#1 git://1583d0a/src/session.ts#L1-L1
+✖ claims#1 git://9180bb2/src/session.ts#L1-L1
     quote no longer resolves in src/session.ts (moved/deleted/reworded past fuzzy threshold 0.87)
 gate: FAIL — ≥1 stale anchor (exit 11)
 exit code: 11
@@ -27,8 +27,8 @@ exit code: 11
 ▸ Move the quoted line to src/rotation.ts and commit
 
 ▸ edt reanchor claims#1
-claims#1: git://1583d0a/src/session.ts#L1-L1
-      → git://811e6c2/src/rotation.ts#L1-L1  (exact, score 1.00)
+claims#1: git://9180bb2/src/session.ts#L1-L1
+      → git://de39a8a/src/rotation.ts#L1-L1  (exact, score 1.00)
 rewrote .ledger/claims.md (1 anchor updated)
 
 ▸ edt verify --gate  (expect exit 0 again)
@@ -47,4 +47,4 @@ cd claims-ledger && npm install && npm run build
 ./demo/scenario.sh
 ```
 
-See [RECORDING.md](../RECORDING.md) for asciinema / GIF instructions.
+See [RECORDING.md](../RECORDING.md) for demo artifacts and recording options.

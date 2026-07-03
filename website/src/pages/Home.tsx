@@ -38,8 +38,15 @@ export function Home() {
           <div className="flex flex-wrap items-center gap-3">
             <a href="https://www.npmjs.com/package/@claims-ledger/edt" target="_blank" rel="noopener noreferrer">
               <img
-                src="https://img.shields.io/npm/v/@claims-ledger/edt?color=f97316&label=npm"
-                alt="npm version"
+                src="https://img.shields.io/npm/v/@claims-ledger/edt?color=f97316&label=edt"
+                alt="npm @claims-ledger/edt"
+                height="20"
+              />
+            </a>
+            <a href="https://www.npmjs.com/package/@claims-ledger/ledger-core" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://img.shields.io/npm/v/@claims-ledger/ledger-core?color=f97316&label=ledger-core"
+                alt="npm @claims-ledger/ledger-core"
                 height="20"
               />
             </a>
@@ -91,8 +98,6 @@ export function Home() {
           ]}
         />
         <p className="mt-4 text-sm text-[var(--color-muted)]">
-          Until the npm package is live, clone the repo and run{" "}
-          <code className="text-[var(--color-accent)]">npm ci && npm run build && npm exec -w @claims-ledger/edt edt init</code>.
           Gate every PR with zero local install:{" "}
           <code className="text-[var(--color-accent)]">uses: isatimur/claims-ledger@v1</code>
         </p>

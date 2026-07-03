@@ -2,11 +2,12 @@
 
 > **Every claim in your docs, PRs, and agent decisions carries a machine-verifiable pointer to its source — and CI fails when the pointer goes stale.**
 
-**Website:** [isatimur.github.io/claims-ledger](https://isatimur.github.io/claims-ledger/) · **npm:** [`@claims-ledger/edt`](https://www.npmjs.com/package/@claims-ledger/edt)
+**Website:** [isatimur.github.io/claims-ledger](https://isatimur.github.io/claims-ledger/) · **npm:** [`@claims-ledger/edt`](https://www.npmjs.com/package/@claims-ledger/edt) · [`@claims-ledger/ledger-core`](https://www.npmjs.com/package/@claims-ledger/ledger-core)
 
 [![Claims verified](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fisatimur%2Fclaims-ledger%2Fmain%2F.ledger%2Fbadge.json)](.ledger/claims.md)
 [![CI](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml/badge.svg)](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml)
-[![npm](https://img.shields.io/npm/v/@claims-ledger/edt)](https://www.npmjs.com/package/@claims-ledger/edt)
+[![npm edt](https://img.shields.io/npm/v/@claims-ledger/edt?label=edt)](https://www.npmjs.com/package/@claims-ledger/edt)
+[![npm ledger-core](https://img.shields.io/npm/v/@claims-ledger/ledger-core?label=ledger-core)](https://www.npmjs.com/package/@claims-ledger/ledger-core)
 
 [![60-second demo](demo/demo.gif)](demo/scenario.sh)
 

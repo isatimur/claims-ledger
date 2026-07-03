@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0b;
+  --color-surface: #111113;
+  --color-border: #2a2a2e;
+  --color-muted: #71717a;
+  --color-text: #e4e4e7;
+  --color-accent: #f97316;
+  --color-accent-dim: #ea580c;
+  --color-terminal-green: #4ade80;
+  --color-terminal-red: #f87171;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace, monospace;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: local("JetBrains Mono"), local("SF Mono");
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+.terminal-glow {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent) 25%, transparent),
+    0 0 40px color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.gradient-radial {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in srgb, var(--color-accent) 15%, transparent), transparent);
+}

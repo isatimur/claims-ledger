@@ -3,6 +3,18 @@
   "version": "1.0.0",
   "description": "edt \u2014 Evidence Decision Trace. A CLI that makes agents (and humans) anchor every claim and decision to a verifiable source, and fails CI when anchors go stale.",
   "license": "MIT",
+  "homepage": "https://isatimur.github.io/claims-ledger/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isatimur/claims-ledger.git",
+    "directory": "packages/edt"
+  },
+  "bugs": {
+    "url": "https://github.com/isatimur/claims-ledger/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "bin": {
     "edt": "dist/cli.js"

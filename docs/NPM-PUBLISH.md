@@ -1,6 +1,6 @@
 # npm publish — @claims-ledger/edt
 
-**Status (Jul 3, 2026):** Package is **not yet published**. `@claims-ledger/edt` returns 404 on npm. Local `npm whoami` is unauthenticated — publish requires user login.
+**Status (Jul 3, 2026):** GitHub secret `NPM_TOKEN` is set. npm org `@claims-ledger` must be created at https://www.npmjs.com/org/create and added to the token's allowed scopes before publish succeeds.
 
 ---
 

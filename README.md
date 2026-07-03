@@ -2,6 +2,8 @@
 
 > **Every claim in your docs, PRs, and agent decisions carries a machine-verifiable pointer to its source — and CI fails when the pointer goes stale.**
 
+**Website:** [isatimur.github.io/claims-ledger](https://isatimur.github.io/claims-ledger/) · **npm:** [`@claims-ledger/edt`](https://www.npmjs.com/package/@claims-ledger/edt)
+
 [![Claims verified](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fisatimur%2Fclaims-ledger%2Fmain%2F.ledger%2Fbadge.json)](.ledger/claims.md)
 [![CI](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml/badge.svg)](https://github.com/isatimur/claims-ledger/actions/workflows/ledger.yml)
 [![npm](https://img.shields.io/npm/v/@claims-ledger/edt)](https://www.npmjs.com/package/@claims-ledger/edt)
@@ -39,12 +41,12 @@ Copy from [`examples/ledger.yml`](examples/ledger.yml) · sandbox template in [`
 ## Quickstart
 
 ```bash
-npx @claims-ledger/edt init      # coming soon on npm — until then: npm install && npm run build && ./packages/edt/dist/cli.js
+npx @claims-ledger/edt init
 $EDITOR .ledger/claims.md        # write a claim, anchor it to a commit/doc/ADR
 edt verify --gate                # exit 0: all anchors fresh · exit 11: something went stale
 ```
 
-> **npm:** `@claims-ledger/edt` is not published yet. Run `./scripts/npm-publish.sh` after `npm login` — see [`docs/NPM-PUBLISH.md`](docs/NPM-PUBLISH.md).
+Full docs: [isatimur.github.io/claims-ledger/docs](https://isatimur.github.io/claims-ledger/docs)
 
 `edt verify` writes [`.ledger/badge.json`](.ledger/badge.json) (shields.io endpoint schema) — commit it for a live README badge with zero infrastructure.
 

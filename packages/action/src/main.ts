@@ -61,18 +61,25 @@ async function main(): Promise<void> {
     }
   }
 
+  const docsGlobs = input("docs-globs")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   const inputs: ActionInputs = {
     ledgerPath: input("ledger-path", ".ledger/claims.md"),
     mode: (input("mode", "both") as ActionInputs["mode"]) || "both",
     failOn: parseFailOn(input("fail-on", "stale-anchor,unanchored-strong")),
     transcriptsDir: input("transcripts-dir", ".ledger/transcripts"),
+    ...(docsGlobs.length > 0 ? { docsGlobs } : {}),
+    ...(input("extract-model") ? { extractModel: input("extract-model") } : {}),
     ...(input("openrouter-api-key") ? { openrouterApiKey: input("openrouter-api-key") } : {}),
     ...(process.env.GITHUB_SHA ? { headSha: process.env.GITHUB_SHA } : {}),
     ...(process.env.GITHUB_BASE_REF ? { baseRef: process.env.GITHUB_BASE_REF } : {}),
     ...(pr != null ? { pr } : {}),
   };
 
-  const result = runAction(workspace, inputs);
+  const result = await runAction(workspace, inputs);
 
   for (const n of result.notices) console.log(`::notice::${n}`);
 

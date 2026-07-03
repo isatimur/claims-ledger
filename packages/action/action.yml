@@ -25,6 +25,9 @@ inputs:
   fail-on:
     description: 'Comma list: stale-anchor,unanchored-strong,support-downgrade'
     default: 'stale-anchor,unanchored-strong'
+  extract-model:
+    description: 'Model for extract-mode claim mining (via OpenRouter)'
+    default: 'deepseek/deepseek-chat'
   judge-models:
     description: 'Cross-family panel, comma-separated (median wins)'
     default: 'meta-llama/llama-3.3-70b,qwen/qwen-2.5-72b,deepseek/deepseek-chat'

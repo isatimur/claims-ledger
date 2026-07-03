@@ -55,8 +55,8 @@ const BASE_INPUTS = {
 };
 
 describe("action verify mode", () => {
-  it("fresh ledger: success conclusion, no failure, report written", () => {
-    const r = runAction(root, BASE_INPUTS);
+  it("fresh ledger: success conclusion, no failure, report written", async () => {
+    const r = await runAction(root, BASE_INPUTS);
     expect(r.failed).toBe(false);
     expect(r.verify.stale).toBe(0);
     expect(r.checkRun.conclusion).toBe("success");
@@ -65,9 +65,9 @@ describe("action verify mode", () => {
     expect(r.report).toContain("claims");
   });
 
-  it("stale anchor: action_required, annotation on the anchored file, fail-on trips", () => {
+  it("stale anchor: action_required, annotation on the anchored file, fail-on trips", async () => {
     fs.writeFileSync(path.join(root, "src/session.ts"), "// gone\n");
-    const r = runAction(root, BASE_INPUTS);
+    const r = await runAction(root, BASE_INPUTS);
     expect(r.failed).toBe(true);
     expect(r.failureReasons.join()).toContain("stale anchor");
     expect(r.checkRun.conclusion).toBe("action_required");
@@ -78,17 +78,17 @@ describe("action verify mode", () => {
     expect(r.report).toContain("## Stale ⚠");
   });
 
-  it("unanchored-strong gate trips on a strong claim without quoted anchors", () => {
+  it("unanchored-strong gate trips on a strong claim without quoted anchors", async () => {
     fs.writeFileSync(
       path.join(root, ".ledger/claims.md"),
       ["# Claims Ledger", "", "## 2) Bold claim with a quote-less anchor", "- **Support level:** strong", "  - **Anchor:** `gh://issues/1` · confidence: medium", ""].join("\n"),
     );
-    const r = runAction(root, BASE_INPUTS);
+    const r = await runAction(root, BASE_INPUTS);
     expect(r.failed).toBe(true);
     expect(r.failureReasons.join()).toContain("strong claim(s) without a quoted anchor");
   });
 
-  it("diffs against the base branch ledger (added claim shows up)", () => {
+  it("diffs against the base branch ledger (added claim shows up)", async () => {
     // base is committed; add a claim on head (working tree only)
     fs.appendFileSync(
       path.join(root, ".ledger/claims.md"),
@@ -100,17 +100,17 @@ describe("action verify mode", () => {
         "",
       ].join("\n"),
     );
-    const r = runAction(root, BASE_INPUTS);
+    const r = await runAction(root, BASE_INPUTS);
     expect(r.ledgerDiffSummary.added).toBe(1);
     expect(r.report).toContain("## Added");
     expect(r.report).toContain("claims#2");
   });
 
-  it("support-downgrade gate trips when a claim weakens vs base", () => {
+  it("support-downgrade gate trips when a claim weakens vs base", async () => {
     writeLedger("export const ROTATION_INTERVAL_MS = 24 * 60 * 60 * 1000;");
     const md = fs.readFileSync(path.join(root, ".ledger/claims.md"), "utf-8");
     fs.writeFileSync(path.join(root, ".ledger/claims.md"), md.replace("strong", "tentative"));
-    const r = runAction(root, {
+    const r = await runAction(root, {
       ...BASE_INPUTS,
       failOn: parseFailOn("support-downgrade"),
     });
@@ -119,14 +119,59 @@ describe("action verify mode", () => {
     expect(r.ledgerDiffSummary.downgraded).toBe(1);
   });
 
-  it("extract mode without an API key emits a skip notice, never fabricates", () => {
-    const r = runAction(root, { ...BASE_INPUTS, mode: "both" });
+  it("extract mode without an API key emits a skip notice, never fabricates", async () => {
+    const r = await runAction(root, { ...BASE_INPUTS, mode: "both" });
     expect(r.notices.join()).toContain("no openrouter-api-key");
   });
 
-  it("missing ledger is a notice, not a crash", () => {
+  it("extract mode mines drafts from changed docs, anchors quotes, rejects fabrications", async () => {
+    fs.mkdirSync(path.join(root, "docs"), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, "docs/session.md"),
+      "# Session\n\nAuth tokens are rotated every 24 hours by the session worker.\n",
+    );
+    sh(["add", "-A"]);
+    sh(["commit", "-qm", "docs", "--no-verify"]);
+    const r = await runAction(root, {
+      ...BASE_INPUTS,
+      mode: "extract",
+      baseRef: undefined as unknown as string, // no base → docs-globs path
+      docsGlobs: ["docs/**/*.md"],
+      complete: async () =>
+        JSON.stringify({
+          claims: [
+            { text: "Tokens rotate every 24h", quote: "rotated every 24 hours by the session worker", scopes: ["session"] },
+            { text: "Fabricated claim", quote: "this text exists nowhere" },
+          ],
+        }),
+    });
+    expect(r.extract).toMatchObject({ accepted: 1, rejected: 1, errors: 0 });
+    const proposals = fs.readFileSync(path.join(root, ".ledger/claims.proposed.md"), "utf-8");
+    expect(proposals).toContain("Tokens rotate every 24h");
+    expect(proposals).toContain("docs/session.md#L3-L3");
+    expect(proposals).not.toContain("Fabricated claim");
+    expect(r.notices.join()).toContain("1 rejected (quote did not resolve — anti-fabrication)");
+    // claim ids continue after the existing ledger (claims#1 exists)
+    expect(proposals).toContain("## 2) Tokens rotate every 24h");
+  });
+
+  it("extract mode with a key but no changed docs is a clean no-op notice", async () => {
+    const r = await runAction(root, {
+      ...BASE_INPUTS,
+      mode: "extract",
+      baseRef: undefined as unknown as string,
+      docsGlobs: ["nonexistent/**/*.md"],
+      complete: async () => {
+        throw new Error("must not be called");
+      },
+    });
+    expect(r.notices.join()).toContain("no changed docs");
+    expect(r.extract).toBeUndefined();
+  });
+
+  it("missing ledger is a notice, not a crash", async () => {
     fs.rmSync(path.join(root, ".ledger/claims.md"));
-    const r = runAction(root, { ...BASE_INPUTS, baseRef: undefined as unknown as string });
+    const r = await runAction(root, { ...BASE_INPUTS, baseRef: undefined as unknown as string });
     expect(r.failed).toBe(false);
     expect(r.notices.join()).toContain("no ledger at");
   });

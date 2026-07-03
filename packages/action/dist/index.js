@@ -5,7 +5,7 @@ import * as fs3 from "node:fs";
 
 // src/run.ts
 import * as fs2 from "node:fs";
-import * as path2 from "node:path";
+import * as path3 from "node:path";
 import { execFileSync } from "node:child_process";
 
 // ../ledger-core/dist/types.js
@@ -507,6 +507,134 @@ function diffLedgers(base, head) {
   return { added, removed, modified, downgraded };
 }
 
+// ../ledger-core/dist/extract.js
+function extractPrompt(source, existingClaims) {
+  const excerpt = source.excerpt ?? source.content;
+  const existing = existingClaims.length > 0 ? `
+Claims already in the ledger (do NOT re-propose these):
+${existingClaims.slice(0, 20).map((t) => `- ${t}`).join("\n")}
+` : "";
+  return `You extract falsifiable claims from source text for a Claims Ledger.
+A claim is a declarative statement that asserts something checkable about the
+system or its behavior (not an opinion, not a heading, not boilerplate).
+
+Rules:
+- Propose at most 5 claims from the text below.
+- Each claim MUST include "quote": a VERBATIM substring copied character-for-character
+  from the text below. Do not paraphrase, trim words mid-sentence, or invent text.
+  A quote that does not appear in the source will be rejected by a resolver.
+- Prefer short, single-line quotes (the most load-bearing line).
+- Skip text that yields no falsifiable claim. An empty list is a good answer.
+${existing}
+File: ${source.path}
+Text:
+<<<
+${excerpt}
+>>>
+
+Respond with ONLY a JSON object:
+{"claims": [{"text": "<claim>", "quote": "<verbatim substring>", "scopes": ["<area>"]}]}`;
+}
+function parseDraftsReply(content) {
+  const tryParse = (s) => {
+    try {
+      const obj = JSON.parse(s);
+      if (!Array.isArray(obj.claims))
+        return null;
+      return obj.claims.filter((c) => typeof c === "object" && c !== null && typeof c.text === "string" && typeof c.quote === "string" && c.text.trim().length > 0 && c.quote.trim().length > 0).map((c) => ({
+        text: c.text.trim(),
+        quote: c.quote,
+        ...Array.isArray(c.scopes) ? { scopes: c.scopes.filter((s2) => typeof s2 === "string") } : {}
+      }));
+    } catch {
+      return null;
+    }
+  };
+  const direct = tryParse(content);
+  if (direct)
+    return direct;
+  const fenced = /```(?:json)?\s*([\s\S]*?)```/.exec(content);
+  if (fenced)
+    return tryParse(fenced[1].trim());
+  const brace = content.indexOf("{");
+  if (brace >= 0)
+    return tryParse(content.slice(brace, content.lastIndexOf("}") + 1));
+  return null;
+}
+function anchorDraft(draft, source, claimId, extractedBy) {
+  const res = resolveQuote(draft.quote, source.content);
+  if (!res)
+    return null;
+  return {
+    claim_id: claimId,
+    text: draft.text,
+    support_level: "tentative",
+    // drafts start tentative; a human or the panel promotes
+    candidate_scopes: draft.scopes ?? [],
+    anchors: [
+      {
+        scheme: "git",
+        ref: `git://${source.sha}/${source.path}#L${res.startLine + 1}-L${res.endLine + 1}`,
+        confidence: res.method === "exact" ? "high" : "medium",
+        quote: draft.quote
+      }
+    ],
+    provenance: { extracted_by: extractedBy }
+  };
+}
+async function extractClaims(sources, complete, opts) {
+  const accepted = [];
+  const rejected = [];
+  const errors = [];
+  let next = opts.nextId ?? 1;
+  for (const source of sources) {
+    const reply = await complete(extractPrompt(source, opts.existingClaims ?? []));
+    if (reply === null) {
+      errors.push(`${source.path}: model call failed`);
+      continue;
+    }
+    const drafts = parseDraftsReply(reply);
+    if (drafts === null) {
+      errors.push(`${source.path}: unparseable model reply`);
+      continue;
+    }
+    for (const draft of drafts) {
+      const claim = anchorDraft(draft, { path: source.path, content: source.content, sha: opts.sha }, `claims#${next}`, opts.extractedBy);
+      if (claim) {
+        accepted.push(claim);
+        next++;
+      } else {
+        rejected.push({ draft, path: source.path });
+      }
+    }
+  }
+  return { accepted, rejected, errors };
+}
+function renderProposedClaims(claims, rejected) {
+  const lines = [
+    "# Proposed claims (extract mode)",
+    "",
+    "> Drafts mined by the LLM extractor. Every quote below RESOLVED at its anchor",
+    "> (fabricated quotes were rejected" + (rejected > 0 ? ` \u2014 ${rejected} dropped` : "") + ").",
+    "> Review, then move keepers into `.ledger/claims.md` and set a support level.",
+    ""
+  ];
+  for (const c of claims) {
+    const n = c.claim_id.replace(/^claims#/, "");
+    lines.push(`## ${n}) ${c.text}`);
+    lines.push(`- **Support level:** ${c.support_level}`);
+    if (c.candidate_scopes.length > 0)
+      lines.push(`- **Scopes:** ${c.candidate_scopes.join(", ")}`);
+    for (const a of c.anchors) {
+      lines.push(`  - **Anchor:** \`${a.ref}\` \xB7 confidence: ${a.confidence}`);
+      if (a.quote)
+        lines.push(`    - **Quote:** "${a.quote}"`);
+    }
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+
 // ../ledger-core/dist/report.js
 function claimLine(c) {
   const out = [`### ${c.claim_id} \u2014 ${c.text}  [${c.support_level}]`];
@@ -562,11 +690,11 @@ function buildCheckRunPayload(diff, verify, ctx) {
   const totalAnchors = verify.fresh + verify.stale + verify.unverifiable;
   const annotations = staleResults.slice(0, 50).map((s) => {
     const parsed = parseAnchorRef(s.anchor.ref);
-    const path3 = parsed && (parsed.scheme === "git" || parsed.scheme === "doc") ? parsed.path : ".ledger/claims.md";
+    const path4 = parsed && (parsed.scheme === "git" || parsed.scheme === "doc") ? parsed.path : ".ledger/claims.md";
     const startLine = parsed && parsed.scheme === "git" ? parsed.startLine : 1;
     const endLine = parsed && parsed.scheme === "git" ? parsed.endLine : 1;
     return {
-      path: path3,
+      path: path4,
       start_line: startLine,
       end_line: endLine,
       annotation_level: "warning",
@@ -594,8 +722,56 @@ function buildCheckRunPayload(diff, verify, ctx) {
   };
 }
 
+// ../edt/dist/workspace.js
+import * as path2 from "node:path";
+var LEDGER_DIR = ".ledger";
+var CLAIMS_MD = path2.join(LEDGER_DIR, "claims.md");
+var LEDGER_JSON = path2.join(LEDGER_DIR, "ledger.json");
+var TRACES_DIR = path2.join(LEDGER_DIR, "traces");
+
+// ../edt/dist/openrouter.js
+var OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+var defaultSleep = (ms) => new Promise((r) => setTimeout(r, ms));
+async function openrouterComplete(apiKey, model, prompt, opts = {}) {
+  const fetchImpl = opts.fetchImpl ?? fetch;
+  const maxAttempts = opts.maxAttempts ?? 3;
+  const backoffMs = opts.backoffMs ?? 500;
+  const sleep = opts.sleep ?? defaultSleep;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    if (attempt > 0)
+      await sleep(backoffMs * 2 ** (attempt - 1));
+    try {
+      const res = await fetchImpl(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/isatimur/claims-ledger",
+          "X-Title": "claims-ledger extract"
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0,
+          max_tokens: opts.maxTokens ?? 1024,
+          ...opts.json !== false ? { response_format: { type: "json_object" } } : {}
+        })
+      });
+      if (res.status === 429 || res.status >= 500)
+        continue;
+      if (!res.ok)
+        return null;
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content ?? null;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
 // src/run.ts
-function git(cwd, args) {
+function git2(cwd, args) {
   try {
     return execFileSync("git", args, { cwd, encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
   } catch {
@@ -605,26 +781,97 @@ function git(cwd, args) {
 function loadBaseClaims(workspace, ledgerPath, baseRef) {
   if (!baseRef) return [];
   for (const ref of [`origin/${baseRef}`, baseRef]) {
-    const content = git(workspace, ["show", `${ref}:${ledgerPath}`]);
+    const content = git2(workspace, ["show", `${ref}:${ledgerPath}`]);
     if (content !== null) return parseLedger(content);
   }
   return [];
 }
-function runAction(workspace, inputs) {
-  const notices = [];
-  if (inputs.mode === "extract" || inputs.mode === "both") {
-    if (inputs.openrouterApiKey) {
-      notices.push(
-        "extract: LLM claim mining is not implemented in this MVP build \u2014 skipping (verify still runs)."
-      );
-    } else {
-      notices.push("extract: skipped \u2014 no openrouter-api-key configured (flag-don't-fabricate).");
+function globToRegex(glob) {
+  const esc = glob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\//g, "").replace(/\*\*/g, "").replace(/\*/g, "[^/]*").replace(/\u0001/g, "(?:.*/)?");
+  return new RegExp(`^${esc}$`);
+}
+var EXTRACTABLE = /\.(md|mdx|markdown|txt|rst|adoc)$/i;
+var MAX_EXCERPT = 8e3;
+function extractSources(workspace, inputs) {
+  let candidates = [];
+  if (inputs.baseRef) {
+    for (const ref of [`origin/${inputs.baseRef}`, inputs.baseRef]) {
+      const out = git2(workspace, ["diff", "--name-only", "--diff-filter=ACMR", `${ref}...HEAD`]);
+      if (out !== null) {
+        candidates = out.split("\n").filter(Boolean);
+        break;
+      }
     }
   }
-  const ledgerFile = path2.join(workspace, inputs.ledgerPath);
+  if (candidates.length === 0) {
+    const globs = (inputs.docsGlobs ?? ["docs/**/*.md", "README.md"]).map(globToRegex);
+    const tracked = git2(workspace, ["ls-files"]) ?? "";
+    candidates = tracked.split("\n").filter(Boolean).filter((f) => globs.some((g) => g.test(f)));
+  }
+  return candidates.filter((f) => EXTRACTABLE.test(f) && !f.startsWith(".ledger/")).map((f) => {
+    const abs = path3.join(workspace, f);
+    if (!fs2.existsSync(abs)) return null;
+    const content = fs2.readFileSync(abs, "utf-8");
+    return {
+      path: f,
+      content,
+      ...content.length > MAX_EXCERPT ? { excerpt: content.slice(0, MAX_EXCERPT) } : {}
+    };
+  }).filter((s) => s !== null);
+}
+async function runAction(workspace, inputs) {
+  const notices = [];
+  let extractSummary;
+  const ledgerFile = path3.join(workspace, inputs.ledgerPath);
   const headClaims = fs2.existsSync(ledgerFile) ? parseLedger(fs2.readFileSync(ledgerFile, "utf-8")) : [];
   if (!fs2.existsSync(ledgerFile)) {
     notices.push(`no ledger at ${inputs.ledgerPath} \u2014 run \`npx @claims-ledger/edt init\` to scaffold one.`);
+  }
+  if (inputs.mode === "extract" || inputs.mode === "both") {
+    if (!inputs.complete && !inputs.openrouterApiKey) {
+      notices.push("extract: skipped \u2014 no openrouter-api-key configured (flag-don't-fabricate).");
+    } else {
+      const complete = inputs.complete ?? ((prompt) => openrouterComplete(
+        inputs.openrouterApiKey,
+        inputs.extractModel ?? "deepseek/deepseek-chat",
+        prompt
+      ));
+      const sources = extractSources(workspace, inputs);
+      if (sources.length === 0) {
+        notices.push("extract: no changed docs to mine claims from.");
+      } else {
+        const sha = git2(workspace, ["rev-parse", "--short", "HEAD"]) ?? inputs.headSha?.slice(0, 7) ?? "0000000";
+        const nextId = headClaims.reduce(
+          (m, c) => Math.max(m, parseInt(c.claim_id.replace(/^claims#/, ""), 10) || 0),
+          0
+        ) + 1;
+        const result = await extractClaims(sources, complete, {
+          sha,
+          extractedBy: "auto-ledger-verify/0.2.0",
+          existingClaims: headClaims.map((c) => c.text),
+          nextId
+        });
+        let proposalsPath;
+        if (result.accepted.length > 0) {
+          proposalsPath = path3.join(path3.dirname(inputs.ledgerPath), "claims.proposed.md");
+          fs2.mkdirSync(path3.dirname(path3.join(workspace, proposalsPath)), { recursive: true });
+          fs2.writeFileSync(
+            path3.join(workspace, proposalsPath),
+            renderProposedClaims(result.accepted, result.rejected.length),
+            "utf-8"
+          );
+        }
+        notices.push(
+          `extract: ${result.accepted.length} claim draft(s) anchored` + (result.rejected.length > 0 ? ` \xB7 ${result.rejected.length} rejected (quote did not resolve \u2014 anti-fabrication)` : "") + (result.errors.length > 0 ? ` \xB7 ${result.errors.length} source(s) errored` : "") + (proposalsPath ? ` \u2192 ${proposalsPath}` : "")
+        );
+        extractSummary = {
+          accepted: result.accepted.length,
+          rejected: result.rejected.length,
+          errors: result.errors.length,
+          ...proposalsPath ? { proposalsPath } : {}
+        };
+      }
+    }
   }
   const baseClaims = loadBaseClaims(workspace, inputs.ledgerPath, inputs.baseRef);
   const diff = diffLedgers(baseClaims, headClaims);
@@ -640,9 +887,9 @@ function runAction(workspace, inputs) {
     headCount: headClaims.length
   };
   const report = renderLedgerReport(diff, verify, ctx);
-  const reportPath = path2.join(path2.dirname(inputs.ledgerPath), "ledger-report.md");
-  fs2.mkdirSync(path2.dirname(path2.join(workspace, reportPath)), { recursive: true });
-  fs2.writeFileSync(path2.join(workspace, reportPath), report, "utf-8");
+  const reportPath = path3.join(path3.dirname(inputs.ledgerPath), "ledger-report.md");
+  fs2.mkdirSync(path3.dirname(path3.join(workspace, reportPath)), { recursive: true });
+  fs2.writeFileSync(path3.join(workspace, reportPath), report, "utf-8");
   const checkRun = buildCheckRunPayload(diff, verify, ctx);
   const failureReasons = [];
   if (inputs.failOn.has("stale-anchor") && verify.stale > 0) {
@@ -678,7 +925,8 @@ function runAction(workspace, inputs) {
     },
     failed: failureReasons.length > 0,
     failureReasons,
-    notices
+    notices,
+    ...extractSummary ? { extract: extractSummary } : {}
   };
 }
 function parseFailOn(raw) {
@@ -739,17 +987,20 @@ async function main() {
     } catch {
     }
   }
+  const docsGlobs = input("docs-globs").split("\n").map((s) => s.trim()).filter(Boolean);
   const inputs = {
     ledgerPath: input("ledger-path", ".ledger/claims.md"),
     mode: input("mode", "both") || "both",
     failOn: parseFailOn(input("fail-on", "stale-anchor,unanchored-strong")),
     transcriptsDir: input("transcripts-dir", ".ledger/transcripts"),
+    ...docsGlobs.length > 0 ? { docsGlobs } : {},
+    ...input("extract-model") ? { extractModel: input("extract-model") } : {},
     ...input("openrouter-api-key") ? { openrouterApiKey: input("openrouter-api-key") } : {},
     ...process.env.GITHUB_SHA ? { headSha: process.env.GITHUB_SHA } : {},
     ...process.env.GITHUB_BASE_REF ? { baseRef: process.env.GITHUB_BASE_REF } : {},
     ...pr != null ? { pr } : {}
   };
-  const result = runAction(workspace, inputs);
+  const result = await runAction(workspace, inputs);
   for (const n of result.notices) console.log(`::notice::${n}`);
   setOutput("ledger-diff", JSON.stringify(result.ledgerDiffSummary));
   setOutput("report-path", result.reportPath);

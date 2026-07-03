@@ -7,7 +7,7 @@ on:
     tags: ['v*']
 jobs:
   mirror:
-    if: ${{ secrets.MIRROR_SYNC_TOKEN != '' }}
+    if: false  # flip to true after adding MIRROR_SYNC_TOKEN secret — or run scripts/sync-action-mirror.sh locally
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

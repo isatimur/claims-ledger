@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "command": "skills/claims-ledger/hooks/require-edt-trace.sh",
+        "loop_limit": 1
+      }
+    ]
+  }
+}

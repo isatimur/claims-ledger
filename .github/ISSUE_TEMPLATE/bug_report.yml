@@ -1,0 +1,36 @@
+---
+name: Bug report
+description: Something broke — verify, reanchor, Action, or parser
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Include `edt verify` output if anchor-related.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        edt version / Action version
+        minimal .ledger/claims.md snippet (redact secrets)
+    validations:
+      required: true
+  - type: input
+    id: exit-code
+    attributes:
+      label: Exit code (if verify --gate)
+      placeholder: "11"

@@ -1,0 +1,27 @@
+---
+name: Feature request
+description: New anchor scheme, adapter, integration recipe
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Design constraints
+      options:
+        - label: Must not fabricate — unverifiable stays flagged
+          required: true
+        - label: Exit codes are API — breaking change needs major bump
+          required: false

@@ -1,0 +1,25 @@
+# Self-hosting sandbox — runs claims-ledger on every PR
+name: claims-ledger
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: isatimur/auto-ledger-verify@v1
+        with:
+          mode: verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ledger-report
+          path: .ledger/ledger-report.md

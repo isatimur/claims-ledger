@@ -1,7 +1,7 @@
 {
   "name": "claims-ledger",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Claims-Ledger-as-a-Service \u2014 source-anchored claims for docs, PRs, and agent decisions. CI fails when the pointer goes stale.",
   "license": "MIT",
   "workspaces": [

@@ -1,0 +1,122 @@
+[
+  {
+    "claim_id": "claims#1",
+    "text": "The important thing is not the code but the prompt and the guardrails that got you there",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "openai-harness-engineering-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://am_oeAoUhew 00:06:56.800 → 00:07:00.720",
+        "confidence": "high",
+        "label": "Ryan Lopopolo, OpenAI",
+        "quote": "The important thing is not the code but the prompt and the guardrails that got you there."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "am_oeAoUhew",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#2",
+    "text": "Documentation, ADRs, and breadcrumbs teach agents what good work looks like",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "openai-harness-engineering-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://am_oeAoUhew 00:07:02.560 → 00:07:09.120",
+        "confidence": "high",
+        "label": "Ryan Lopopolo, OpenAI",
+        "quote": "leaving breadcrumbs, documentation, ADRs, persona oriented documentation around what a good job looks like."
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "am_oeAoUhew",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#3",
+    "text": "A good harness operationalizes giving the model text at the right time",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "openai-harness-engineering-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://am_oeAoUhew 00:24:40.799 → 00:24:45.840",
+        "confidence": "high",
+        "label": "Ryan Lopopolo, OpenAI",
+        "quote": "a good harness is really operationalized around giving the model text at the right time"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "am_oeAoUhew",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#4",
+    "text": "The practical unit of harness engineering is the codebase, not isolated snippets",
+    "support_level": "strong",
+    "candidate_scopes": [
+      "event-ledger",
+      "openai-harness-engineering-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://am_oeAoUhew 00:42:21.520 → 00:42:22.880",
+        "confidence": "high",
+        "label": "Ryan Lopopolo, OpenAI",
+        "quote": "codebase for harness engineering"
+      }
+    ],
+    "caveats": "",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "am_oeAoUhew",
+      "sample": true
+    }
+  },
+  {
+    "claim_id": "claims#5",
+    "text": "Reliability comes less from model cleverness than from surrounding scaffolding",
+    "support_level": "moderate",
+    "candidate_scopes": [
+      "event-ledger",
+      "openai-harness-engineering-2025"
+    ],
+    "anchors": [
+      {
+        "scheme": "yt",
+        "ref": "yt://am_oeAoUhew 00:06:56.800 → 00:07:00.720",
+        "confidence": "high",
+        "label": "Ryan Lopopolo, OpenAI",
+        "quote": "The important thing is not the code but the prompt and the guardrails that got you there."
+      }
+    ],
+    "caveats": "Book synthesis claim — anchored to this talk as primary evidence.",
+    "provenance": {
+      "extracted_by": "event-ledger.mjs",
+      "video_id": "am_oeAoUhew",
+      "sample": true
+    }
+  }
+]

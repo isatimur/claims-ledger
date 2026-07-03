@@ -1,0 +1,9 @@
+---
+name: Config
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/isatimur/claims-ledger/blob/main/CONTRIBUTING.md
+    about: Setup, layout, rules of the road
+  - name: Good first issues
+    url: https://github.com/isatimur/claims-ledger/blob/main/docs/good-first-issues.md
+    about: Seeded starter tasks

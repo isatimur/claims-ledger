@@ -10,9 +10,11 @@
 
 **Repo readiness (before any post):**
 - [x] `edt init && edt verify` passes on this repo itself — README claims live in `.ledger/claims.md` with anchors (self-hosting is the credibility move)
-- [ ] 60-second GIF at top of README: PR opened → check fails on stale anchor → `edt reanchor` → check green (record against a real refactor, not a toy)
-- [x] README quickstart ≤ 5 lines to first value
-- [ ] Two live event ledgers published on fromcopilottocolleague.com (HN post must link to a *thing*, not a promise)
+- [x] 60-second demo script at `demo/scenario.sh` (GIF: record per `demo/RECORDING.md`)
+- [x] Event ledger sample at `examples/ledgers/openai-harness-engineering-2025/`
+- [x] Sandbox template at `examples/sandbox/`
+- [x] Show HN draft at `docs/SHOW-HN.md`
+- [x] Marketplace guide at `docs/MARKETPLACE.md`
 - [ ] Marketplace listing live with `examples/ledger.yml` as copy-paste
 - [x] `CONTRIBUTING.md` + good-first-issues seeded (HN traffic converts to contributors in the first 48h or never)
 - [ ] Badge on 3–5 friendly repos (`img.claims-ledger.dev` — Cloudflare Worker, Phase 2)
